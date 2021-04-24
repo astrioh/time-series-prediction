@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -17,102 +11,124 @@ namespace vremRyad
         public Form1()
         {
             InitializeComponent();
-            comboBox1.SelectedIndex = 0;
-            comboBox2.SelectedIndex = 0;
+            comboBoxChartType.SelectedIndex = 0;
+            comboBoxPredictionMethod.SelectedIndex = 0;
         }
 
-        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult res = openFileDialog1.ShowDialog();
+
             if (res == DialogResult.OK)
             {
+                dataGridViewTimeSeries.Columns.Clear();
+
                 string path = openFileDialog1.FileName;
                 string[] lines = File.ReadAllLines(path);
-                DataTable dt = new DataTable();
-                dataGridView1.Columns.Clear();
-                if (lines.Length > 0)
+                try
                 {
-                    for (int i = 0; i < lines[0].Split(';').Length; i++)
-                    {
-                        dt.Columns.Add(new DataColumn(""));
-                    }
-                    foreach(string line in lines)
-                    {
-                        string[] words = line.Split(';');
-                        DataRow dr = dt.NewRow();
-                        bool check = true;
-                        for (int j = 0; j < words.Length; j++)
-                        {
-                            dr[j] = words[j];
-                            try
-                            {
-                                double.Parse(words[j]);
-                            }
-                            catch
-                            {
-                                check = false;
-                                break;
-                            }
-                        }
-                        if (check)
-                        {
-                            dt.Rows.Add(dr);
-                        }
-                    }
-                    if (dt.Rows.Count > 0)
-                    {
-                        dataGridView1.DataSource = dt;
-                    }
+                    dataGridViewTimeSeries.DataSource = this.parseTimeSeries(lines);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            dataGridView1.ClearSelection();
+            dataGridViewTimeSeries.ClearSelection();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
             {
-                chart1.Series[0].Points.AddXY(dataGridView1[0, i].Value.ToString(), dataGridView1[1, i].Value.ToString());
+                chartTimeSeries.Series[0].Points.AddXY(dataGridViewTimeSeries[0, i].Value.ToString(), dataGridViewTimeSeries[1, i].Value.ToString());
             }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (comboBox1.SelectedIndex)
+            switch (comboBoxChartType.SelectedIndex)
             {
                 case 0:
-                    chart1.Series[0].ChartType = SeriesChartType.Spline;
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Spline;
                     break;
                 case 1:
-                    chart1.Series[0].ChartType = SeriesChartType.Line;
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Line;
                     break;
                 case 2:
-                    chart1.Series[0].ChartType = SeriesChartType.Bar;
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Bar;
                     break;
                 case 3:
-                    chart1.Series[0].ChartType = SeriesChartType.Column;
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Column;
                     break;
                 case 4:
-                    chart1.Series[0].ChartType = SeriesChartType.Pie;
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Pie;
                     break;
                 case 5:
-                    chart1.Series[0].ChartType = SeriesChartType.Radar;
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Radar;
                     break;
             }
         }
 
-        private void графикToolStripMenuItem_Click(object sender, EventArgs e)
+        private void chartToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private DataTable parseTimeSeries(string[] lines)
+        {
+            if (lines.Length <= 0)
+            {
+                throw new Exception("Пустой файл");
+            }
+
+            DataTable dt = new DataTable();
+            for (int i = 0; i < lines[0].Split(';').Length; i++)
+            {
+                dt.Columns.Add(new DataColumn(""));
+            }
+
+            foreach (string line in lines)
+            {
+                string[] words = line.Split(';');
+                DataRow dr = dt.NewRow();
+                bool check = true;
+                for (int j = 0; j < words.Length; j++)
+                {
+                    dr[j] = words[j];
+                    try
+                    {
+                        double.Parse(words[j]);
+                    }
+                    catch
+                    {
+                        check = false;
+                        break;
+                    }
+                }
+                if (check)
+                {
+                    dt.Rows.Add(dr);
+                }
+            }
+
+            if (dt.Rows.Count > 0)
+            {
+                return dt;
+            }
+            else
+            {
+                throw new Exception("Ошибка чтения файла");
+            }
         }
     }
 }
