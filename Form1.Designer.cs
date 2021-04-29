@@ -36,7 +36,7 @@
             this.dataGridViewTimeSeries = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.buttonGraphPlot = new System.Windows.Forms.Button();
+            this.buttonPlotGraph = new System.Windows.Forms.Button();
             this.chartTimeSeries = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.comboBoxPredictionMethod = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -77,7 +77,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.dataGridViewTimeSeries);
-            this.splitContainer1.Panel1.Controls.Add(this.buttonGraphPlot);
+            this.splitContainer1.Panel1.Controls.Add(this.buttonPlotGraph);
             // 
             // splitContainer1.Panel2
             // 
@@ -86,8 +86,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Panel2.Controls.Add(this.comboBoxChartType);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
-            this.splitContainer1.Size = new System.Drawing.Size(819, 415);
-            this.splitContainer1.SplitterDistance = 324;
+            this.splitContainer1.Size = new System.Drawing.Size(1011, 560);
+            this.splitContainer1.SplitterDistance = 399;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -113,7 +113,7 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             this.dataGridViewTimeSeries.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewTimeSeries.RowTemplate.Height = 24;
-            this.dataGridViewTimeSeries.Size = new System.Drawing.Size(324, 383);
+            this.dataGridViewTimeSeries.Size = new System.Drawing.Size(399, 528);
             this.dataGridViewTimeSeries.TabIndex = 2;
             // 
             // Column1
@@ -130,18 +130,18 @@
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
-            // buttonGraphPlot
+            // buttonPlotGraph
             // 
-            this.buttonGraphPlot.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonGraphPlot.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGraphPlot.Location = new System.Drawing.Point(0, 383);
-            this.buttonGraphPlot.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonGraphPlot.Name = "buttonGraphPlot";
-            this.buttonGraphPlot.Size = new System.Drawing.Size(324, 32);
-            this.buttonGraphPlot.TabIndex = 1;
-            this.buttonGraphPlot.Text = "Построить график";
-            this.buttonGraphPlot.UseVisualStyleBackColor = true;
-            this.buttonGraphPlot.Click += new System.EventHandler(this.button1_Click);
+            this.buttonPlotGraph.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonPlotGraph.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonPlotGraph.Location = new System.Drawing.Point(0, 528);
+            this.buttonPlotGraph.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonPlotGraph.Name = "buttonPlotGraph";
+            this.buttonPlotGraph.Size = new System.Drawing.Size(399, 32);
+            this.buttonPlotGraph.TabIndex = 1;
+            this.buttonPlotGraph.Text = "Построить график";
+            this.buttonPlotGraph.UseVisualStyleBackColor = true;
+            this.buttonPlotGraph.Click += new System.EventHandler(this.buttonPlotGraph_Click);
             // 
             // chartTimeSeries
             // 
@@ -156,7 +156,7 @@
             series1.Color = System.Drawing.Color.Red;
             series1.Name = "Series1";
             this.chartTimeSeries.Series.Add(series1);
-            this.chartTimeSeries.Size = new System.Drawing.Size(494, 307);
+            this.chartTimeSeries.Size = new System.Drawing.Size(611, 452);
             this.chartTimeSeries.TabIndex = 11;
             this.chartTimeSeries.Text = "chart1";
             // 
@@ -175,8 +175,9 @@
             this.comboBoxPredictionMethod.Location = new System.Drawing.Point(0, 80);
             this.comboBoxPredictionMethod.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxPredictionMethod.Name = "comboBoxPredictionMethod";
-            this.comboBoxPredictionMethod.Size = new System.Drawing.Size(494, 28);
+            this.comboBoxPredictionMethod.Size = new System.Drawing.Size(611, 28);
             this.comboBoxPredictionMethod.TabIndex = 10;
+            this.comboBoxPredictionMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxPredictionMethod_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -186,7 +187,7 @@
             this.label2.Location = new System.Drawing.Point(0, 52);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(494, 28);
+            this.label2.Size = new System.Drawing.Size(611, 28);
             this.label2.TabIndex = 9;
             this.label2.Text = "Метод прогнозирования:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -209,8 +210,9 @@
             this.comboBoxChartType.Location = new System.Drawing.Point(0, 24);
             this.comboBoxChartType.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxChartType.Name = "comboBoxChartType";
-            this.comboBoxChartType.Size = new System.Drawing.Size(494, 28);
+            this.comboBoxChartType.Size = new System.Drawing.Size(611, 28);
             this.comboBoxChartType.TabIndex = 6;
+            this.comboBoxChartType.SelectedIndexChanged += new System.EventHandler(this.comboBoxChartType_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -220,7 +222,7 @@
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(494, 24);
+            this.label1.Size = new System.Drawing.Size(611, 24);
             this.label1.TabIndex = 5;
             this.label1.Text = "Тип графика:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -235,7 +237,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(819, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1011, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -259,14 +261,14 @@
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.openToolStripMenuItem.Text = "&Открыть";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(170, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -274,13 +276,13 @@
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.saveToolStripMenuItem.Text = "&Сохранить";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(170, 6);
             // 
             // printToolStripMenuItem
             // 
@@ -288,18 +290,18 @@
             this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.printToolStripMenuItem.Text = "&Печать";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(170, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.exitToolStripMenuItem.Text = "Вы&ход";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -341,7 +343,7 @@
             // chartToolStripMenuItem
             // 
             this.chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-            this.chartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chartToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.chartToolStripMenuItem.Text = "&График";
             this.chartToolStripMenuItem.Click += new System.EventHandler(this.chartToolStripMenuItem_Click);
             // 
@@ -353,7 +355,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(819, 439);
+            this.ClientSize = new System.Drawing.Size(1011, 584);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -391,7 +393,7 @@
         private System.Windows.Forms.ToolStripMenuItem appearanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem chartToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Button buttonGraphPlot;
+        private System.Windows.Forms.Button buttonPlotGraph;
         private System.Windows.Forms.DataGridView dataGridViewTimeSeries;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;

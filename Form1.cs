@@ -46,15 +46,17 @@ namespace vremRyad
             dataGridViewTimeSeries.ClearSelection();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonPlotGraph_Click(object sender, EventArgs e)
         {
+            chartTimeSeries.Series[0].Points.Clear();
+
             for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
             {
-                chartTimeSeries.Series[0].Points.AddXY(dataGridViewTimeSeries[0, i].Value.ToString(), dataGridViewTimeSeries[1, i].Value.ToString());
+                chartTimeSeries.Series[0].Points.AddXY(processValueForChart(dataGridViewTimeSeries[0, i].Value), processValueForChart(dataGridViewTimeSeries[1, i].Value));
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxChartType_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (comboBoxChartType.SelectedIndex)
             {
@@ -79,9 +81,19 @@ namespace vremRyad
             }
         }
 
+        private void comboBoxPredictionMethod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void chartToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private double processValueForChart(object value)
+        {
+            return double.Parse(value.ToString());
         }
 
         private DataTable parseTimeSeries(string[] lines)
@@ -92,30 +104,42 @@ namespace vremRyad
             }
 
             DataTable dt = new DataTable();
-            for (int i = 0; i < lines[0].Split(';').Length; i++)
+
+            int lineLength = lines[0].Split(';').Length;
+
+            if (lines[0][lines[0].Length - 1] == ';')
+            {
+                lineLength--;
+            }
+
+            
+            for (int i = 0; i < lineLength; i++)
             {
                 dt.Columns.Add(new DataColumn(""));
             }
 
             foreach (string line in lines)
             {
-                string[] words = line.Split(';');
                 DataRow dr = dt.NewRow();
-                bool check = true;
-                for (int j = 0; j < words.Length; j++)
+
+                bool isValid = true;
+
+                string[] words = line.Split(';');
+
+                for (int j = 0; j < lineLength; j++)
                 {
-                    dr[j] = words[j];
-                    try
+                    string processedWord = processWord(words[j]);
+                    isValid = double.TryParse(processedWord, out double parsedWord);
+
+                    if (!isValid)
                     {
-                        double.Parse(words[j]);
-                    }
-                    catch
-                    {
-                        check = false;
                         break;
                     }
+
+                    dr[j] = parsedWord;
                 }
-                if (check)
+
+                if (isValid)
                 {
                     dt.Rows.Add(dr);
                 }
@@ -129,6 +153,11 @@ namespace vremRyad
             {
                 throw new Exception("Ошибка чтения файла");
             }
+        }
+
+        private string processWord(string word)
+        {
+            return word.Trim();
         }
     }
 }
