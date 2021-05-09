@@ -18,6 +18,9 @@ namespace vremRyad
         private Methods method;
         private string[][] data;
 
+        private Methods Method { get => method; set => method = value; }
+        public string[][] Data { get => data; set => data = value; }
+
         public TimeSeries()
         {
 
