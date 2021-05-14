@@ -177,7 +177,6 @@
             this.comboBoxPredictionMethod.Name = "comboBoxPredictionMethod";
             this.comboBoxPredictionMethod.Size = new System.Drawing.Size(611, 28);
             this.comboBoxPredictionMethod.TabIndex = 10;
-            this.comboBoxPredictionMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxPredictionMethod_SelectedIndexChanged);
             // 
             // label2
             // 

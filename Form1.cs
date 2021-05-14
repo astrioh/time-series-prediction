@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -8,11 +9,14 @@ namespace vremRyad
 {
     public partial class Form1 : Form
     {
+        TimeSeries timeSeries;
         public Form1()
         {
             InitializeComponent();
             comboBoxChartType.SelectedIndex = 0;
             comboBoxPredictionMethod.SelectedIndex = 0;
+            dataGridViewTimeSeries.
+            this.timeSeries = new TimeSeries();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -29,10 +33,10 @@ namespace vremRyad
                 dataGridViewTimeSeries.Columns.Clear();
 
                 string path = openFileDialog1.FileName;
-                string[] lines = File.ReadAllLines(path);
                 try
                 {
-                    dataGridViewTimeSeries.DataSource = this.parseTimeSeries(lines);
+                    string[][] parsedData = this.parseTimeSeries(path);
+                    this.fillDataTable(parsedData);
                 }
                 catch (Exception ex)
                 {
@@ -81,11 +85,6 @@ namespace vremRyad
             }
         }
 
-        private void comboBoxPredictionMethod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void chartToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -96,14 +95,14 @@ namespace vremRyad
             return double.Parse(value.ToString());
         }
 
-        private DataTable parseTimeSeries(string[] lines)
+        private string[][] parseTimeSeries(string path)
         {
+            string[] lines = File.ReadAllLines(path);
+
             if (lines.Length <= 0)
             {
                 throw new Exception("Пустой файл");
             }
-
-            DataTable dt = new DataTable();
 
             int lineLength = lines[0].Split(';').Length;
 
@@ -112,15 +111,11 @@ namespace vremRyad
                 lineLength--;
             }
 
-            
-            for (int i = 0; i < lineLength; i++)
-            {
-                dt.Columns.Add(new DataColumn(""));
-            }
+            List<string[]> linesList = new List<string[]>();
 
             foreach (string line in lines)
             {
-                DataRow dr = dt.NewRow();
+                List<string> lineList = new List<string>();
 
                 bool isValid = true;
 
@@ -136,18 +131,41 @@ namespace vremRyad
                         break;
                     }
 
-                    dr[j] = parsedWord;
+                    lineList.Add(processedWord);
                 }
 
                 if (isValid)
                 {
-                    dt.Rows.Add(dr);
+                    linesList.Add(lineList.ToArray());
                 }
+            }
+
+            return linesList.ToArray();
+        }
+        private void fillDataTable(string[][] table)
+        {
+            DataTable dt = new DataTable();
+            
+            for (int i = 0; i < table[0].Length; i++)
+            {
+                dt.Columns.Add(new DataColumn(""));
+            }
+
+            foreach (string[] line in table)
+            {
+                DataRow dr = dt.NewRow();
+
+                for (int i = 0; i < line.Length; i++)
+                {
+                    dr[i] = line[i];
+                }
+
+                dt.Rows.Add(dr);
             }
 
             if (dt.Rows.Count > 0)
             {
-                return dt;
+                dataGridViewTimeSeries.DataSource = dt;
             }
             else
             {
