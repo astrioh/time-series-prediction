@@ -15,7 +15,7 @@ namespace vremRyad
             AveragePerformanceIndicators
         };
 
-        private Methods method;
+        private Methods method = Methods.AverageGrowthRate;
         private string[][] data;
 
         private Methods Method { get => method; set => method = value; }

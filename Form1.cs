@@ -4,18 +4,18 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
+using Microsoft.VisualBasic;
 
 namespace vremRyad
 {
     public partial class Form1 : Form
     {
         TimeSeries timeSeries;
+        private char separator = ';';
+
         public Form1()
         {
             InitializeComponent();
-            comboBoxChartType.SelectedIndex = 0;
-            comboBoxPredictionMethod.SelectedIndex = 0;
-            dataGridViewTimeSeries.
             this.timeSeries = new TimeSeries();
         }
 
@@ -26,13 +26,13 @@ namespace vremRyad
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult res = openFileDialog1.ShowDialog();
+            DialogResult res = openFileDialog.ShowDialog();
 
             if (res == DialogResult.OK)
             {
                 dataGridViewTimeSeries.Columns.Clear();
 
-                string path = openFileDialog1.FileName;
+                string path = openFileDialog.FileName;
                 try
                 {
                     string[][] parsedData = this.parseTimeSeries(path);
@@ -60,9 +60,9 @@ namespace vremRyad
             }
         }
 
-        private void comboBoxChartType_SelectedIndexChanged(object sender, EventArgs e)
+        private void chartTypeChanged(int tag)
         {
-            switch (comboBoxChartType.SelectedIndex)
+            switch (tag)
             {
                 case 0:
                     chartTimeSeries.Series[0].ChartType = SeriesChartType.Spline;
@@ -85,11 +85,6 @@ namespace vremRyad
             }
         }
 
-        private void chartToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private double processValueForChart(object value)
         {
             return double.Parse(value.ToString());
@@ -104,9 +99,9 @@ namespace vremRyad
                 throw new Exception("Пустой файл");
             }
 
-            int lineLength = lines[0].Split(';').Length;
+            int lineLength = lines[0].Split(separator).Length;
 
-            if (lines[0][lines[0].Length - 1] == ';')
+            if (lines[0][lines[0].Length - 1] == separator)
             {
                 lineLength--;
             }
@@ -119,7 +114,7 @@ namespace vremRyad
 
                 bool isValid = true;
 
-                string[] words = line.Split(';');
+                string[] words = line.Split(separator);
 
                 for (int j = 0; j < lineLength; j++)
                 {
@@ -176,6 +171,55 @@ namespace vremRyad
         private string processWord(string word)
         {
             return word.Trim();
+        }
+
+        private void separatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string sep = Interaction.InputBox("Введите разделитель:", "Разделитель", separator.ToString());
+            if (sep == "")
+            {
+                return;
+            }
+            if (sep.Length > 1)
+            {
+                DialogResult dr = MessageBox.Show($"Разделитель указан неверно!\nВозвращено значение: \"{separator}\". \nИзменить?", "Ошибка", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                if (dr == DialogResult.Yes)
+                {
+                    separatorToolStripMenuItem.PerformClick();
+                }
+            }
+            else
+            {
+                separator = char.Parse(sep);
+            }
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorDialog.Color = chartTimeSeries.Series[0].Color;
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                chartTimeSeries.Series[0].Color = colorDialog.Color;
+            }
+        }
+
+        private void graphTypeChanges(object sender, EventArgs e)
+        {
+            foreach(ToolStripMenuItem item in graphTypeToolStripMenuItem.DropDownItems)
+            {
+                item.Checked = false;
+            }
+            ((ToolStripMenuItem)sender).Checked = true;
+            chartTypeChanged(Convert.ToInt32(((ToolStripMenuItem)sender).Tag));
+        }
+
+        private void forecastingChanges(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem item in forecastingToolStripMenuItem.DropDownItems)
+            {
+                item.Checked = false;
+            }
+            ((ToolStripMenuItem)sender).Checked = true;
         }
     }
 }
