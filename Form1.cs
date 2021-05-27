@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
-using Microsoft.VisualBasic;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -13,13 +12,20 @@ namespace vremRyad
     public partial class Form1 : Form
     {
         TimeSeries timeSeries;
+        enum TableHeadersAnalyze {
+            ChainedAbsoluteIncrease, 
+            BasisAbsoluteIncrease
+        };
         private char separator = ';';
         private string openFileName = string.Empty;
+
+        public char Separator { get => separator; set => separator = value; }
 
         public Form1()
         {
             InitializeComponent();
             this.timeSeries = new TimeSeries();
+            timeSeries.SelectedMethod = TimeSeries.Methods.AverageGrowthRate;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -38,8 +44,17 @@ namespace vremRyad
                 openFileName = openFileDialog.FileName;
                 try
                 {
-                    string[][] parsedData = this.parseTimeSeries(openFileName);
+                    double[][] parsedData = this.parseTimeSeries(openFileName);
+
+                    double[] timeSeriesData = new double[parsedData.Length];
+                    for (int i = 0; i < parsedData.Length; i++)
+                    {
+                        timeSeriesData[i] = parsedData[i][1];
+                    }
+                    this.timeSeries.Data = timeSeriesData;
+
                     this.fillDataTable(parsedData);
+                    buttonPlotGraph.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -90,7 +105,7 @@ namespace vremRyad
             return double.Parse(value.ToString());
         }
 
-        private string[][] parseTimeSeries(string path)
+        private double[][] parseTimeSeries(string path)
         {
             string[] lines = File.ReadAllLines(path);
 
@@ -106,11 +121,11 @@ namespace vremRyad
                 lineLength--;
             }
 
-            List<string[]> linesList = new List<string[]>();
+            List<double[]> linesList = new List<double[]>();
 
             foreach (string line in lines)
             {
-                List<string> lineList = new List<string>();
+                List<double> lineList = new List<double>();
 
                 bool isValid = true;
 
@@ -126,7 +141,7 @@ namespace vremRyad
                         break;
                     }
 
-                    lineList.Add(processedWord);
+                    lineList.Add(parsedWord);
                 }
 
                 if (isValid)
@@ -137,16 +152,16 @@ namespace vremRyad
 
             return linesList.ToArray();
         }
-        private void fillDataTable(string[][] table)
+        private void fillDataTable(double[][] values)
         {
             DataTable dt = new DataTable();
             
-            for (int i = 0; i < table[0].Length; i++)
+            for (int i = 0; i < values[0].Length; i++)
             {
                 dt.Columns.Add(new DataColumn(""));
             }
 
-            foreach (string[] line in table)
+            foreach (double[] line in values)
             {
                 DataRow dr = dt.NewRow();
 
@@ -175,23 +190,15 @@ namespace vremRyad
 
         private void separatorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string sep = Interaction.InputBox("Введите разделитель:", "Разделитель", separator.ToString());
-            if (sep == "")
+            ChooseSeparator chooseSeparator = new ChooseSeparator();
+            chooseSeparator.Separator = this.separator;
+
+            DialogResult result = chooseSeparator.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                return;
+                this.Separator = chooseSeparator.Separator;
             }
-            if (sep.Length > 1)
-            {
-                DialogResult dr = MessageBox.Show($"Разделитель указан неверно!\nВозвращено значение: \"{separator}\". \nИзменить?", "Ошибка", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                if (dr == DialogResult.Yes)
-                {
-                    separatorToolStripMenuItem.PerformClick();
-                }
-            }
-            else
-            {
-                separator = char.Parse(sep);
-            }
+
         }
 
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -220,6 +227,27 @@ namespace vremRyad
                 item.Checked = false;
             }
             ((ToolStripMenuItem)sender).Checked = true;
+        }
+
+        private void buttonAnalyze_Click(object sender, EventArgs e)
+        {
+            double[][] absoluteIncreaseData = this.timeSeries.absoluteIncrease();
+            analyzeTimeSeries();
+        }
+
+        private void analyzeTimeSeries()
+        {
+            DataTable dataTable = (DataTable) dataGridViewTimeSeries.DataSource;
+
+            foreach (TableHeadersAnalyze tableHeader in Enum.GetValues(typeof(TableHeadersAnalyze)))
+            {
+                dataTable.Columns.Add(new DataColumn(tableHeader.ToString()));
+            }
+
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                dataTable.Rows[i][TableHeadersAnalyze.ChainedAbsoluteIncrease.ToString()] = 0; // TODO: сделать метод, возвращающий словарь, ключ - название параметра, значение - массив чисел
+            }
         }
 
         private string forecastingCheck()

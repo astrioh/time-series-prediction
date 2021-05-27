@@ -247,6 +247,33 @@
             this.exitToolStripMenuItem.Text = "Вы&ход";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contentToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
+            this.helpToolStripMenuItem.Text = "Спра&вка";
+            // 
+            // contentToolStripMenuItem
+            // 
+            this.contentToolStripMenuItem.Name = "contentToolStripMenuItem";
+            this.contentToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.contentToolStripMenuItem.Text = "&Содержание";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(193, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.aboutToolStripMenuItem.Text = "&О программе...";
+            // 
             // графикToolStripMenuItem
             // 
             this.графикToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
