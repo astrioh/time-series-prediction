@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataGridViewTimeSeries = new System.Windows.Forms.DataGridView();
@@ -47,10 +47,6 @@
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.графикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graphTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +54,6 @@
             this.straightLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.barToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.columnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pieСhartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.radarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forecastingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,8 +61,13 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.таблицаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -114,10 +114,10 @@
             this.dataGridViewTimeSeries.ReadOnly = true;
             this.dataGridViewTimeSeries.RowHeadersVisible = false;
             this.dataGridViewTimeSeries.RowHeadersWidth = 51;
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
-            this.dataGridViewTimeSeries.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            this.dataGridViewTimeSeries.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewTimeSeries.RowTemplate.Height = 24;
             this.dataGridViewTimeSeries.Size = new System.Drawing.Size(532, 652);
             this.dataGridViewTimeSeries.TabIndex = 2;
@@ -151,17 +151,17 @@
             // 
             // chartTimeSeries
             // 
-            chartArea7.Name = "ChartArea1";
-            this.chartTimeSeries.ChartAreas.Add(chartArea7);
+            chartArea1.Name = "ChartArea1";
+            this.chartTimeSeries.ChartAreas.Add(chartArea1);
             this.chartTimeSeries.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartTimeSeries.Location = new System.Drawing.Point(0, 0);
             this.chartTimeSeries.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chartTimeSeries.Name = "chartTimeSeries";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series7.Color = System.Drawing.Color.Red;
-            series7.Name = "Series1";
-            this.chartTimeSeries.Series.Add(series7);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Color = System.Drawing.Color.Red;
+            series1.Name = "Series1";
+            this.chartTimeSeries.Series.Add(series1);
             this.chartTimeSeries.Size = new System.Drawing.Size(815, 691);
             this.chartTimeSeries.TabIndex = 11;
             this.chartTimeSeries.Text = "chart1";
@@ -171,10 +171,10 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.графикToolStripMenuItem,
             this.forecastingToolStripMenuItem,
-            this.таблицаToolStripMenuItem});
+            this.таблицаToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -219,6 +219,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.saveToolStripMenuItem.Text = "&Сохранить";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -246,33 +247,6 @@
             this.exitToolStripMenuItem.Text = "Вы&ход";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
-            this.helpToolStripMenuItem.Text = "Спра&вка";
-            // 
-            // contentToolStripMenuItem
-            // 
-            this.contentToolStripMenuItem.Name = "contentToolStripMenuItem";
-            this.contentToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
-            this.contentToolStripMenuItem.Text = "&Содержание";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(193, 6);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
-            this.aboutToolStripMenuItem.Text = "&О программе...";
-            // 
             // графикToolStripMenuItem
             // 
             this.графикToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -285,7 +259,7 @@
             // colorToolStripMenuItem
             // 
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.colorToolStripMenuItem.Text = "&Цвет";
             this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
             // 
@@ -296,10 +270,9 @@
             this.straightLineToolStripMenuItem,
             this.barToolStripMenuItem,
             this.columnsToolStripMenuItem,
-            this.pieСhartToolStripMenuItem,
             this.radarToolStripMenuItem});
             this.graphTypeToolStripMenuItem.Name = "graphTypeToolStripMenuItem";
-            this.graphTypeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.graphTypeToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.graphTypeToolStripMenuItem.Text = "&Тип";
             // 
             // curvedLineToolStripMenuItem
@@ -307,7 +280,7 @@
             this.curvedLineToolStripMenuItem.Checked = true;
             this.curvedLineToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.curvedLineToolStripMenuItem.Name = "curvedLineToolStripMenuItem";
-            this.curvedLineToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.curvedLineToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
             this.curvedLineToolStripMenuItem.Tag = "0";
             this.curvedLineToolStripMenuItem.Text = "Кривая линия";
             this.curvedLineToolStripMenuItem.Click += new System.EventHandler(this.graphTypeChanges);
@@ -315,7 +288,7 @@
             // straightLineToolStripMenuItem
             // 
             this.straightLineToolStripMenuItem.Name = "straightLineToolStripMenuItem";
-            this.straightLineToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.straightLineToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
             this.straightLineToolStripMenuItem.Tag = "1";
             this.straightLineToolStripMenuItem.Text = "Прямая линия";
             this.straightLineToolStripMenuItem.Click += new System.EventHandler(this.graphTypeChanges);
@@ -323,7 +296,7 @@
             // barToolStripMenuItem
             // 
             this.barToolStripMenuItem.Name = "barToolStripMenuItem";
-            this.barToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.barToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
             this.barToolStripMenuItem.Tag = "2";
             this.barToolStripMenuItem.Text = "Бар";
             this.barToolStripMenuItem.Click += new System.EventHandler(this.graphTypeChanges);
@@ -331,24 +304,16 @@
             // columnsToolStripMenuItem
             // 
             this.columnsToolStripMenuItem.Name = "columnsToolStripMenuItem";
-            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
             this.columnsToolStripMenuItem.Tag = "3";
             this.columnsToolStripMenuItem.Text = "Колонны";
             this.columnsToolStripMenuItem.Click += new System.EventHandler(this.graphTypeChanges);
             // 
-            // pieСhartToolStripMenuItem
-            // 
-            this.pieСhartToolStripMenuItem.Name = "pieСhartToolStripMenuItem";
-            this.pieСhartToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.pieСhartToolStripMenuItem.Tag = "4";
-            this.pieСhartToolStripMenuItem.Text = "Круговая диаграмма ";
-            this.pieСhartToolStripMenuItem.Click += new System.EventHandler(this.graphTypeChanges);
-            // 
             // radarToolStripMenuItem
             // 
             this.radarToolStripMenuItem.Name = "radarToolStripMenuItem";
-            this.radarToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.radarToolStripMenuItem.Tag = "5";
+            this.radarToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.radarToolStripMenuItem.Tag = "4";
             this.radarToolStripMenuItem.Text = "Радар";
             this.radarToolStripMenuItem.Click += new System.EventHandler(this.graphTypeChanges);
             // 
@@ -382,7 +347,7 @@
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(403, 26);
-            this.toolStripMenuItem3.Text = "На основе стационарного временного ряда";
+            this.toolStripMenuItem3.Text = "На основе средних показателей динамики";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.forecastingChanges);
             // 
             // таблицаToolStripMenuItem
@@ -400,9 +365,40 @@
             this.separatorToolStripMenuItem.Text = "&Разделитель";
             this.separatorToolStripMenuItem.Click += new System.EventHandler(this.separatorToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contentToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
+            this.helpToolStripMenuItem.Text = "Спра&вка";
+            // 
+            // contentToolStripMenuItem
+            // 
+            this.contentToolStripMenuItem.Name = "contentToolStripMenuItem";
+            this.contentToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.contentToolStripMenuItem.Text = "&Содержание";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(193, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.aboutToolStripMenuItem.Text = "&О программе...";
+            // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "CSV Files (*.csv)|*.csv";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "PDF file|*.pdf";
             // 
             // Form1
             // 
@@ -460,12 +456,12 @@
         private System.Windows.Forms.ToolStripMenuItem straightLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem barToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem columnsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pieСhartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem radarToolStripMenuItem;
         private System.Windows.Forms.ColorDialog colorDialog;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 
