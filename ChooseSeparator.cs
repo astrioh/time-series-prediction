@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace vremRyad
@@ -23,10 +16,15 @@ namespace vremRyad
         {
             if (textBoxSeparator.Text == "")
             {
+                MessageBox.Show("Заполните поле разделителя!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            this.Separator = Char.Parse(textBoxSeparator.Text);
+            if (textBoxSeparator.Text.Length > 1)
+            {
+                MessageBox.Show("Длина разделителя не может\nбыть больше единицы!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            this.Separator = char.Parse(textBoxSeparator.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -34,6 +32,13 @@ namespace vremRyad
         private void ChooseSeparator_Load(object sender, EventArgs e)
         {
             textBoxSeparator.Text = Separator.ToString();
+            textBoxSeparator.Select();
+            textBoxSeparator.SelectionStart = textBoxSeparator.Text.Length;
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
