@@ -37,15 +37,30 @@ namespace vremRyad
                 double chainedIncrease = this.data[i] - this.data[i - 1];
                 double basisIncrease = this.data[i] - this.data[0];
 
-                increaseValues[i] = new double[] { chainedIncrease, basisIncrease };
+                increaseValues[i] = new double[] { Math.Round(chainedIncrease, 2), Math.Round(basisIncrease, 2) };
             }
 
             return increaseValues;
         }
         
+        public double[][] growthRate()
+        {
+            double[][] growthValues = new double[this.data.Length][];
+            growthValues[0] = new double[2];
 
+            for (int i = 1; i < this.data.Length; i++)
+            {
+                double chainedGrowth = (this.data[i] / this.data[i - 1]) * 100;
+                double basisGrowth = this.data[i] / this.data[0] * 100;
+
+                growthValues[i] = new double[] { Math.Round(chainedGrowth, 2), Math.Round(basisGrowth, 2) };
+            }
+
+            return growthValues;
+        }
 
 
 
     }
 }
+ 

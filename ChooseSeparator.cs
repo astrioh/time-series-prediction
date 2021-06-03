@@ -35,5 +35,10 @@ namespace vremRyad
         {
             textBoxSeparator.Text = Separator.ToString();
         }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

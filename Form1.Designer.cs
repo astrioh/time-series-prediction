@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataGridViewTimeSeries = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.buttonPlotGraph = new System.Windows.Forms.Button();
+            this.buttonAnalyzeAndForecast = new System.Windows.Forms.Button();
             this.chartTimeSeries = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +67,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -80,19 +81,19 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 30);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.dataGridViewTimeSeries);
-            this.splitContainer1.Panel1.Controls.Add(this.buttonPlotGraph);
+            this.splitContainer1.Panel1.Controls.Add(this.buttonAnalyzeAndForecast);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.chartTimeSeries);
-            this.splitContainer1.Size = new System.Drawing.Size(1348, 691);
+            this.splitContainer1.Size = new System.Drawing.Size(1348, 689);
             this.splitContainer1.SplitterDistance = 532;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 1;
@@ -102,10 +103,14 @@
             this.dataGridViewTimeSeries.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTimeSeries.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewTimeSeries.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTimeSeries.ColumnHeadersVisible = false;
-            this.dataGridViewTimeSeries.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewTimeSeries.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewTimeSeries.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTimeSeries.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTimeSeries.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -114,40 +119,26 @@
             this.dataGridViewTimeSeries.ReadOnly = true;
             this.dataGridViewTimeSeries.RowHeadersVisible = false;
             this.dataGridViewTimeSeries.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
-            this.dataGridViewTimeSeries.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            this.dataGridViewTimeSeries.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewTimeSeries.RowTemplate.Height = 24;
-            this.dataGridViewTimeSeries.Size = new System.Drawing.Size(532, 652);
+            this.dataGridViewTimeSeries.Size = new System.Drawing.Size(532, 650);
             this.dataGridViewTimeSeries.TabIndex = 2;
             // 
-            // Column1
+            // buttonAnalyzeAndForecast
             // 
-            this.Column1.HeaderText = "";
-            this.Column1.MinimumWidth = 6;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "";
-            this.Column2.MinimumWidth = 6;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // buttonPlotGraph
-            // 
-            this.buttonPlotGraph.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonPlotGraph.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPlotGraph.Location = new System.Drawing.Point(0, 652);
-            this.buttonPlotGraph.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonPlotGraph.Name = "buttonPlotGraph";
-            this.buttonPlotGraph.Size = new System.Drawing.Size(532, 39);
-            this.buttonPlotGraph.TabIndex = 1;
-            this.buttonPlotGraph.Text = "Построить график";
-            this.buttonPlotGraph.UseVisualStyleBackColor = true;
-            this.buttonPlotGraph.Click += new System.EventHandler(this.buttonPlotGraph_Click);
+            this.buttonAnalyzeAndForecast.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonAnalyzeAndForecast.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonAnalyzeAndForecast.Location = new System.Drawing.Point(0, 650);
+            this.buttonAnalyzeAndForecast.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonAnalyzeAndForecast.Name = "buttonAnalyzeAndForecast";
+            this.buttonAnalyzeAndForecast.Size = new System.Drawing.Size(532, 39);
+            this.buttonAnalyzeAndForecast.TabIndex = 1;
+            this.buttonAnalyzeAndForecast.Text = "Проанализировать и спрогнозировать";
+            this.buttonAnalyzeAndForecast.UseVisualStyleBackColor = true;
+            this.buttonAnalyzeAndForecast.Click += new System.EventHandler(this.buttonAnalyzeAndForecast_Click);
             // 
             // chartTimeSeries
             // 
@@ -162,7 +153,7 @@
             series1.Color = System.Drawing.Color.Red;
             series1.Name = "Series1";
             this.chartTimeSeries.Series.Add(series1);
-            this.chartTimeSeries.Size = new System.Drawing.Size(815, 691);
+            this.chartTimeSeries.Size = new System.Drawing.Size(815, 689);
             this.chartTimeSeries.TabIndex = 11;
             this.chartTimeSeries.Text = "chart1";
             // 
@@ -178,7 +169,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1348, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1348, 30);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -193,7 +184,7 @@
             this.toolStripSeparator2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(59, 26);
             this.fileToolStripMenuItem.Text = "&Файл";
             // 
             // openToolStripMenuItem
@@ -247,40 +238,13 @@
             this.exitToolStripMenuItem.Text = "Вы&ход";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
-            this.helpToolStripMenuItem.Text = "Спра&вка";
-            // 
-            // contentToolStripMenuItem
-            // 
-            this.contentToolStripMenuItem.Name = "contentToolStripMenuItem";
-            this.contentToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
-            this.contentToolStripMenuItem.Text = "&Содержание";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(193, 6);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
-            this.aboutToolStripMenuItem.Text = "&О программе...";
-            // 
             // графикToolStripMenuItem
             // 
             this.графикToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.colorToolStripMenuItem,
             this.graphTypeToolStripMenuItem});
             this.графикToolStripMenuItem.Name = "графикToolStripMenuItem";
-            this.графикToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
+            this.графикToolStripMenuItem.Size = new System.Drawing.Size(73, 26);
             this.графикToolStripMenuItem.Text = "&График";
             // 
             // colorToolStripMenuItem
@@ -351,7 +315,7 @@
             this.toolStripMenuItem2,
             this.toolStripMenuItem3});
             this.forecastingToolStripMenuItem.Name = "forecastingToolStripMenuItem";
-            this.forecastingToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.forecastingToolStripMenuItem.Size = new System.Drawing.Size(152, 26);
             this.forecastingToolStripMenuItem.Text = "&Прогнозирование";
             // 
             // toolStripMenuItem1
@@ -382,13 +346,13 @@
             this.таблицаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.separatorToolStripMenuItem});
             this.таблицаToolStripMenuItem.Name = "таблицаToolStripMenuItem";
-            this.таблицаToolStripMenuItem.Size = new System.Drawing.Size(82, 24);
+            this.таблицаToolStripMenuItem.Size = new System.Drawing.Size(82, 26);
             this.таблицаToolStripMenuItem.Text = "&Таблица";
             // 
             // separatorToolStripMenuItem
             // 
             this.separatorToolStripMenuItem.Name = "separatorToolStripMenuItem";
-            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(178, 26);
             this.separatorToolStripMenuItem.Text = "&Разделитель";
             this.separatorToolStripMenuItem.Click += new System.EventHandler(this.separatorToolStripMenuItem_Click);
             // 
@@ -399,7 +363,7 @@
             this.toolStripSeparator5,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(81, 26);
             this.helpToolStripMenuItem.Text = "Спра&вка";
             // 
             // contentToolStripMenuItem
@@ -426,6 +390,22 @@
             // saveFileDialog
             // 
             this.saveFileDialog.Filter = "PDF file|*.pdf";
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "";
+            this.Column1.MinimumWidth = 6;
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 125;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "";
+            this.Column2.MinimumWidth = 6;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Width = 125;
             // 
             // Form1
             // 
@@ -467,10 +447,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Button buttonPlotGraph;
+        private System.Windows.Forms.Button buttonAnalyzeAndForecast;
         private System.Windows.Forms.DataGridView dataGridViewTimeSeries;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartTimeSeries;
         private System.Windows.Forms.ToolStripMenuItem графикToolStripMenuItem;
@@ -489,6 +467,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
     }
 }
 

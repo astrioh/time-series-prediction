@@ -12,10 +12,17 @@ namespace vremRyad
     public partial class Form1 : Form
     {
         TimeSeries timeSeries;
-        enum TableHeadersAnalyze {
-            ChainedAbsoluteIncrease, 
-            BasisAbsoluteIncrease
+        Dictionary<string, string> tableHeadersAnalyze = new Dictionary<string, string>
+        {
+            { "AbsoluteIncrease", "Абсолютный прирост:\nцепной,\nбазисный\n"},
+            { "ChainGrowthRate", "Цепной темп роста:\nкоэффициент,\nпроцент"},
+            { "BaseGrowthRate", "Базисный темп роста:\nкоэффициент,\nпроцент"},
+            { "Null", "Нету"},
+            { "AbsoluteIncreaseValueOnePercent", "Абсолютное значение 1% прироста"},
+            { "RelativeAcceleration", "Относительное ускорение, %"},
+            { "LeadRatio", "Коэффициент опережения"}
         };
+
         private char separator = ';';
         private string openFileName = string.Empty;
 
@@ -54,7 +61,8 @@ namespace vremRyad
                     this.timeSeries.Data = timeSeriesData;
 
                     this.fillDataTable(parsedData);
-                    buttonPlotGraph.Enabled = true;
+                    this.plotGraph();
+                    buttonAnalyzeAndForecast.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -68,7 +76,7 @@ namespace vremRyad
             dataGridViewTimeSeries.ClearSelection();
         }
 
-        private void buttonPlotGraph_Click(object sender, EventArgs e)
+        private void plotGraph()
         {
             chartTimeSeries.Series[0].Points.Clear();
 
@@ -155,11 +163,8 @@ namespace vremRyad
         private void fillDataTable(double[][] values)
         {
             DataTable dt = new DataTable();
-            
-            for (int i = 0; i < values[0].Length; i++)
-            {
-                dt.Columns.Add(new DataColumn(""));
-            }
+            dt.Columns.Add(new DataColumn("Время"));
+            dt.Columns.Add(new DataColumn("Данные"));
 
             foreach (double[] line in values)
             {
@@ -212,7 +217,7 @@ namespace vremRyad
 
         private void graphTypeChanges(object sender, EventArgs e)
         {
-            foreach(ToolStripMenuItem item in graphTypeToolStripMenuItem.DropDownItems)
+            foreach (ToolStripMenuItem item in graphTypeToolStripMenuItem.DropDownItems)
             {
                 item.Checked = false;
             }
@@ -229,25 +234,31 @@ namespace vremRyad
             ((ToolStripMenuItem)sender).Checked = true;
         }
 
-        private void buttonAnalyze_Click(object sender, EventArgs e)
-        {
-            double[][] absoluteIncreaseData = this.timeSeries.absoluteIncrease();
-            analyzeTimeSeries();
-        }
-
         private void analyzeTimeSeries()
         {
-            DataTable dataTable = (DataTable) dataGridViewTimeSeries.DataSource;
+            DataTable dataTable = (DataTable)dataGridViewTimeSeries.DataSource;
 
-            foreach (TableHeadersAnalyze tableHeader in Enum.GetValues(typeof(TableHeadersAnalyze)))
+            foreach (string headerName in tableHeadersAnalyze.Values)
             {
-                dataTable.Columns.Add(new DataColumn(tableHeader.ToString()));
+                dataTable.Columns.Add(new DataColumn(headerName));
+            }
+            try
+            {
+                double[][] absoluteIncrease = this.timeSeries.absoluteIncrease();
+                double[][] growthRate = this.timeSeries.growthRate();
+                
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+
+                    dataTable.Rows[i][tableHeadersAnalyze["AbsoluteIncrease"]] = $"{absoluteIncrease[i][0]}\t\n{absoluteIncrease[i][1]}";
+                }
+            }
+            catch
+            {
+                throw new Exception("Ошибка анализа");
             }
 
-            for (int i = 0; i < dataTable.Rows.Count; i++)
-            {
-                dataTable.Rows[i][TableHeadersAnalyze.ChainedAbsoluteIncrease.ToString()] = 0; // TODO: сделать метод, возвращающий словарь, ключ - название параметра, значение - массив чисел
-            }
+
         }
 
         private string forecastingCheck()
@@ -336,6 +347,11 @@ namespace vremRyad
                     MessageBox.Show($"Текст ошибки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void buttonAnalyzeAndForecast_Click(object sender, EventArgs e)
+        {
+            analyzeTimeSeries();
         }
     }
 }

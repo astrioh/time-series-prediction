@@ -39,9 +39,10 @@ namespace vremRyad
             // 
             this.buttonOk.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonOk.Location = new System.Drawing.Point(45, 77);
+            this.buttonOk.Location = new System.Drawing.Point(60, 95);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(75, 23);
+            this.buttonOk.Size = new System.Drawing.Size(100, 28);
             this.buttonOk.TabIndex = 0;
             this.buttonOk.Text = "ОК";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -51,39 +52,44 @@ namespace vremRyad
             // 
             this.buttonCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCancel.Location = new System.Drawing.Point(140, 77);
+            this.buttonCancel.Location = new System.Drawing.Point(187, 95);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(100, 28);
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Отмена";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(44, 31);
+            this.label1.Location = new System.Drawing.Point(59, 38);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.Size = new System.Drawing.Size(101, 16);
             this.label1.TabIndex = 3;
             this.label1.Text = "Разделитель:";
             // 
             // textBoxSeparator
             // 
-            this.textBoxSeparator.Location = new System.Drawing.Point(126, 28);
+            this.textBoxSeparator.Location = new System.Drawing.Point(168, 34);
+            this.textBoxSeparator.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxSeparator.Name = "textBoxSeparator";
-            this.textBoxSeparator.Size = new System.Drawing.Size(89, 20);
+            this.textBoxSeparator.Size = new System.Drawing.Size(117, 22);
             this.textBoxSeparator.TabIndex = 2;
             // 
             // ChooseSeparator
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(266, 123);
+            this.ClientSize = new System.Drawing.Size(355, 151);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxSeparator);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChooseSeparator";
