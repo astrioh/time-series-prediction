@@ -40,7 +40,7 @@ namespace vremRyad
             this.buttonOk.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOk.Location = new System.Drawing.Point(60, 95);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(100, 28);
             this.buttonOk.TabIndex = 0;
@@ -53,7 +53,7 @@ namespace vremRyad
             this.buttonCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCancel.Location = new System.Drawing.Point(187, 95);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 28);
             this.buttonCancel.TabIndex = 1;
@@ -72,10 +72,11 @@ namespace vremRyad
             // 
             // textBoxSeparator
             // 
-            this.textBoxSeparator.Location = new System.Drawing.Point(168, 34);
-            this.textBoxSeparator.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxSeparator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBoxSeparator.Location = new System.Drawing.Point(170, 32);
+            this.textBoxSeparator.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSeparator.Name = "textBoxSeparator";
-            this.textBoxSeparator.Size = new System.Drawing.Size(117, 22);
+            this.textBoxSeparator.Size = new System.Drawing.Size(117, 27);
             this.textBoxSeparator.TabIndex = 2;
             // 
             // ChooseSeparator
@@ -89,12 +90,12 @@ namespace vremRyad
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChooseSeparator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Выберите разделитель";
+            this.Text = "Введите разделитель";
             this.Load += new System.EventHandler(this.ChooseSeparator_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

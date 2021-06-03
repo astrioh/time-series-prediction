@@ -6,6 +6,11 @@ using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Diagnostics;
+using System.Threading;
+//using LiveCharts;
+//using LiveCharts.WinForms;
+
 
 namespace vremRyad
 {
@@ -25,6 +30,9 @@ namespace vremRyad
 
         private char separator = ';';
         private string openFileName = string.Empty;
+        private string form1Name = "Временные ряды";
+        private string pdfFileName = string.Empty;
+        private DataTable dt;
 
         public char Separator { get => separator; set => separator = value; }
 
@@ -42,12 +50,10 @@ namespace vremRyad
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult res = openFileDialog.ShowDialog();
-
-            if (res == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                clearChartAndTable();
                 dataGridViewTimeSeries.Columns.Clear();
-
                 openFileName = openFileDialog.FileName;
                 try
                 {
@@ -63,6 +69,7 @@ namespace vremRyad
                     this.fillDataTable(parsedData);
                     this.plotGraph();
                     buttonAnalyzeAndForecast.Enabled = true;
+                    this.Text = form1Name + " (" + openFileName.Split('\\')[openFileName.Split('\\').Length - 1] + ")";
                 }
                 catch (Exception ex)
                 {
@@ -75,7 +82,10 @@ namespace vremRyad
         {
             dataGridViewTimeSeries.ClearSelection();
         }
-
+        private double processValueForChart(object value)
+        {
+            return double.Parse(value.ToString());
+        }
         private void plotGraph()
         {
             chartTimeSeries.Series[0].Points.Clear();
@@ -83,6 +93,7 @@ namespace vremRyad
             for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
             {
                 chartTimeSeries.Series[0].Points.AddXY(processValueForChart(dataGridViewTimeSeries[0, i].Value), processValueForChart(dataGridViewTimeSeries[1, i].Value));
+                //chartTimeSeries1.Series[0].Values.Add(100, 100);
             }
         }
 
@@ -107,12 +118,6 @@ namespace vremRyad
                     break;
             }
         }
-
-        private double processValueForChart(object value)
-        {
-            return double.Parse(value.ToString());
-        }
-
         private double[][] parseTimeSeries(string path)
         {
             string[] lines = File.ReadAllLines(path);
@@ -275,11 +280,74 @@ namespace vremRyad
             return itemText;
         }
 
+        private void saveAsPdf(string pdfPath)
+        {
+            // Создание pdf таблицы
+            PdfPTable table = new PdfPTable(dataGridViewTimeSeries.Columns.Count);
+            string fontLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+            BaseFont baseFont = BaseFont.CreateFont(fontLocation, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            Font fontParagraph = new Font(baseFont, 14, iTextSharp.text.Font.NORMAL);
+            for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
+            {
+                for (int j = 0; j < dataGridViewTimeSeries.Columns.Count; j++)
+                {
+                    table.AddCell(new Phrase(dataGridViewTimeSeries.Rows[i].Cells[j].Value.ToString(), fontParagraph));
+                }
+            }
+
+            // Создание случайного имени для картинки из chart
+            string filenameString = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 5);
+            string[] incorrectSymb = { "=", "+", "/" };
+            for (int i = 0; i < incorrectSymb.Length; i++)
+            {
+                filenameString = filenameString.Replace(incorrectSymb[i], "");
+            }
+
+            // Сохранение картинки из chart
+            chartTimeSeries.SaveImage($"{filenameString}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+            // Создание pdf картинки
+            System.Drawing.Image chartImage = System.Drawing.Image.FromFile($"{filenameString}.png");
+            Image pdfImage = Image.GetInstance(chartImage, System.Drawing.Imaging.ImageFormat.Png);
+            pdfImage.Alignment = Element.ALIGN_CENTER;
+
+            // Создание параграфов
+            Paragraph openCsvFile = new Paragraph($"Файл: {openFileName.Split('\\')[openFileName.Split('\\').Length - 1]}", fontParagraph);
+            Paragraph dateTime = new Paragraph($"{DateTime.Now}", fontParagraph);
+            dateTime.Alignment = Element.ALIGN_RIGHT;
+            Paragraph forecasting = new Paragraph($"Прогнозирование: {forecastingCheck()}", fontParagraph);
+            Paragraph analysis = new Paragraph($"Анализ: ", fontParagraph);
+
+            // Создание документа
+            Document pdfDoc;
+
+            using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
+            {
+                pdfDoc = new Document(PageSize.A2, 10f, 10f, 10f, 0f);
+                PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+                pdfDoc.Add(dateTime);
+                pdfDoc.Add(openCsvFile);
+                pdfDoc.Add(forecasting);
+                pdfDoc.Add(analysis);
+                pdfDoc.Add(pdfImage);
+                pdfDoc.Add(table);
+                pdfDoc.Close();
+                stream.Close();
+            }
+
+            //Удаление картинки
+            chartImage.Dispose();
+            File.Delete($"{filenameString}.png");
+
+            pdfFileName = pdfPath;
+        }
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewTimeSeries.Rows.Count < 1 || openFileName == string.Empty)
             {
-                MessageBox.Show($"Временной ряд ещё не спрогнозирован!\nОткройте файл и повторите попытку!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Файл не открыт!\nОткройте файл и повторите попытку!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -287,66 +355,101 @@ namespace vremRyad
             {
                 try
                 {
-                    // Создание pdf таблицы
-                    PdfPTable table = new PdfPTable(dataGridViewTimeSeries.Columns.Count);
-                    string fontLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
-                    BaseFont baseFont = BaseFont.CreateFont(fontLocation, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-                    Font fontParagraph = new Font(baseFont, 14, iTextSharp.text.Font.NORMAL);
-                    for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
-                    {
-                        for (int j = 0; j < dataGridViewTimeSeries.Columns.Count; j++)
-                        {
-                            table.AddCell(new Phrase(dataGridViewTimeSeries.Rows[i].Cells[j].Value.ToString(), fontParagraph));
-                        }
-                    }
-
-                    // Создание случайного имени для картинки из chart
-                    string filenameString = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 5);
-                    string[] incorrectSymb = { "=", "+", "/" };
-                    for (int i = 0; i < incorrectSymb.Length; i++)
-                    {
-                        filenameString = filenameString.Replace(incorrectSymb[i], "");
-                    }
-
-                    // Сохранение картинки из chart
-                    chartTimeSeries.SaveImage($"{filenameString}.png", System.Drawing.Imaging.ImageFormat.Png);
-
-                    // Создание pdf картинки
-                    System.Drawing.Image chartImage = System.Drawing.Image.FromFile($"{filenameString}.png");
-                    Image pdfImage = Image.GetInstance(chartImage, System.Drawing.Imaging.ImageFormat.Png);
-                    pdfImage.Alignment = Element.ALIGN_CENTER;
-
-                    // Создание параграфов
-                    Paragraph openCsvFile = new Paragraph($"Файл: {openFileName.Split('\\')[openFileName.Split('\\').Length - 1]}", fontParagraph);
-                    Paragraph dateTime = new Paragraph($"{DateTime.Now}", fontParagraph);
-                    dateTime.Alignment = Element.ALIGN_RIGHT;
-                    Paragraph forecasting = new Paragraph($"Прогнозирование: {forecastingCheck()}", fontParagraph);
-                    Paragraph analysis = new Paragraph($"Анализ: ", fontParagraph);
-
-                    using (FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
-                    {
-                        Document pdfDoc = new Document(PageSize.A2, 10f, 10f, 10f, 0f);
-                        PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-                        pdfDoc.Add(dateTime);
-                        pdfDoc.Add(openCsvFile);
-                        pdfDoc.Add(forecasting);
-                        pdfDoc.Add(analysis);
-                        pdfDoc.Add(pdfImage);
-                        pdfDoc.Add(table);
-                        pdfDoc.Close();
-                        stream.Close();
-                    }
-
-                    //Удаление картинки
-                    chartImage.Dispose();
-                    File.Delete($"{filenameString}.png");
+                    saveAsPdf(saveFileDialog.FileName);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Текст ошибки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(pdfFileName))
+            {
+                string Filepath = pdfFileName;
+                using (PrintDialog Dialog = new PrintDialog())
+                {
+                    Dialog.ShowDialog();
+                    ProcessStartInfo printProcessInfo = new ProcessStartInfo()
+                    {
+                        Verb = "print",
+                        CreateNoWindow = true,
+                        FileName = Filepath,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process printProcess = new Process();
+                    printProcess.StartInfo = printProcessInfo;
+                    printProcess.Start();
+                    printProcess.WaitForInputIdle();
+                    Thread.Sleep(3000);
+                    if (false == printProcess.CloseMainWindow())
+                    {
+                        printProcess.Kill();
+                    }
+                }
+            }
+            else
+            {
+                saveToolStripMenuItem_Click(null, null);
+            }
+
+
+
+
+
+            /*if (!string.IsNullOrWhiteSpace(pdfFileName))
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = "";
+                process.StartInfo.Verb = "printto";
+
+                process.Start();
+
+                process.WaitForInputIdle();
+                process.Kill();
+            }
+            else
+            {
+                saveToolStripMenuItem_Click(null, null);
+            }*/
+        }
+
+        private void sendToMailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewTimeSeries.Rows.Count < 1 || openFileName == string.Empty)
+            {
+                MessageBox.Show($"Файл не открыт!\nОткройте файл и повторите попытку!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            SendEmail sendEmail = new SendEmail();
+
+            string pathPDFFile = System.Reflection.Assembly.GetExecutingAssembly().Location.
+                Substring(0, System.Reflection.Assembly.GetExecutingAssembly().Location.LastIndexOf('\\')) +
+                $@"\pdfFiles\Отчёт по файлу ({openFileName.Split('\\')[openFileName.Split('\\').Length - 1]} "+
+                $@"{DateTime.Now.ToString("dd.MM.yyyy HH.mm.ss")}).pdf";
+
+            saveAsPdf(pathPDFFile);
+
+            sendEmail.pathPDF = pathPDFFile;
+            sendEmail.ShowDialog();
+
+            File.Delete(pathPDFFile);
+        }
+
+        private void clearChartAndTable()
+        {
+            chartTimeSeries.Series[0].Points.Clear();
+            dt = new DataTable();
+            dataGridViewTimeSeries.DataSource = dt;
+        }
+
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            clearChartAndTable();
         }
 
         private void buttonAnalyzeAndForecast_Click(object sender, EventArgs e)
