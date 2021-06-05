@@ -8,8 +8,6 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Diagnostics;
 using System.Threading;
-//using LiveCharts;
-//using LiveCharts.WinForms;
 
 
 namespace vremRyad
@@ -22,7 +20,7 @@ namespace vremRyad
             { "AbsoluteIncrease", "Абсолютный прирост:\nцепной,\nбазисный\n"},
             { "ChainGrowthRate", "Цепной темп роста:\nкоэффициент,\nпроцент"},
             { "BaseGrowthRate", "Базисный темп роста:\nкоэффициент,\nпроцент"},
-            { "Null", "Нету"},
+            { "IncreaseRate", "Темпы прироста, %:\nежегодные,\nк."},
             { "AbsoluteIncreaseValueOnePercent", "Абсолютное значение 1% прироста"},
             { "RelativeAcceleration", "Относительное ускорение, %"},
             { "LeadRatio", "Коэффициент опережения"}
@@ -64,11 +62,14 @@ namespace vremRyad
                     {
                         timeSeriesData[i] = parsedData[i][1];
                     }
-                    this.timeSeries.Data = timeSeriesData;
+                    this.timeSeries.TimeSeriesSet = timeSeriesData;
+                    this.timeSeries.ForecastName = Convert.ToInt32(parsedData[parsedData.Length - 1][0]);
 
                     this.fillDataTable(parsedData);
                     this.plotGraph();
+
                     buttonAnalyzeAndForecast.Enabled = true;
+
                     this.Text = form1Name + " (" + openFileName.Split('\\')[openFileName.Split('\\').Length - 1] + ")";
                 }
                 catch (Exception ex)
@@ -93,31 +94,9 @@ namespace vremRyad
             for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
             {
                 chartTimeSeries.Series[0].Points.AddXY(processValueForChart(dataGridViewTimeSeries[0, i].Value), processValueForChart(dataGridViewTimeSeries[1, i].Value));
-                //chartTimeSeries1.Series[0].Values.Add(100, 100);
             }
         }
 
-        private void chartTypeChanged(int tag)
-        {
-            switch (tag)
-            {
-                case 0:
-                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Spline;
-                    break;
-                case 1:
-                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Line;
-                    break;
-                case 2:
-                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Bar;
-                    break;
-                case 3:
-                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Column;
-                    break;
-                case 4:
-                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Radar;
-                    break;
-            }
-        }
         private double[][] parseTimeSeries(string path)
         {
             string[] lines = File.ReadAllLines(path);
@@ -219,6 +198,28 @@ namespace vremRyad
                 chartTimeSeries.Series[0].Color = colorDialog.Color;
             }
         }
+        
+        private void chartTypeChanged(int tag)
+        {
+            switch (tag)
+            {
+                case 0:
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Spline;
+                    break;
+                case 1:
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Line;
+                    break;
+                case 2:
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Bar;
+                    break;
+                case 3:
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Column;
+                    break;
+                case 4:
+                    chartTimeSeries.Series[0].ChartType = SeriesChartType.Radar;
+                    break;
+            }
+        }
 
         private void graphTypeChanges(object sender, EventArgs e)
         {
@@ -227,7 +228,23 @@ namespace vremRyad
                 item.Checked = false;
             }
             ((ToolStripMenuItem)sender).Checked = true;
-            chartTypeChanged(Convert.ToInt32(((ToolStripMenuItem)sender).Tag));
+            this.chartTypeChanged(Convert.ToInt32(((ToolStripMenuItem)sender).Tag));
+        }
+
+        private void forecastMethodChanged(int tag)
+        {
+            switch (tag)
+            {
+                case 0:
+                    this.timeSeries.SelectedMethod = TimeSeries.Methods.AverageGrowthRate;
+                    break;
+                case 1:
+                    this.timeSeries.SelectedMethod = TimeSeries.Methods.MovingAverage;
+                    break;
+                case 2:
+                    this.timeSeries.SelectedMethod = TimeSeries.Methods.AveragePerformanceIndicators;
+                    break;
+            }
         }
 
         private void forecastingChanges(object sender, EventArgs e)
@@ -237,33 +254,7 @@ namespace vremRyad
                 item.Checked = false;
             }
             ((ToolStripMenuItem)sender).Checked = true;
-        }
-
-        private void analyzeTimeSeries()
-        {
-            DataTable dataTable = (DataTable)dataGridViewTimeSeries.DataSource;
-
-            foreach (string headerName in tableHeadersAnalyze.Values)
-            {
-                dataTable.Columns.Add(new DataColumn(headerName));
-            }
-            try
-            {
-                double[][] absoluteIncrease = this.timeSeries.absoluteIncrease();
-                double[][] growthRate = this.timeSeries.growthRate();
-                
-                for (int i = 0; i < dataTable.Rows.Count; i++)
-                {
-
-                    dataTable.Rows[i][tableHeadersAnalyze["AbsoluteIncrease"]] = $"{absoluteIncrease[i][0]}\t\n{absoluteIncrease[i][1]}";
-                }
-            }
-            catch
-            {
-                throw new Exception("Ошибка анализа");
-            }
-
-
+            this.forecastMethodChanged(Convert.ToInt32(((ToolStripMenuItem)sender).Tag));
         }
 
         private string forecastingCheck()
@@ -394,26 +385,6 @@ namespace vremRyad
             {
                 saveToolStripMenuItem_Click(null, null);
             }
-
-
-
-
-
-            /*if (!string.IsNullOrWhiteSpace(pdfFileName))
-            {
-                Process process = new Process();
-                process.StartInfo.FileName = "";
-                process.StartInfo.Verb = "printto";
-
-                process.Start();
-
-                process.WaitForInputIdle();
-                process.Kill();
-            }
-            else
-            {
-                saveToolStripMenuItem_Click(null, null);
-            }*/
         }
 
         private void sendToMailToolStripMenuItem_Click(object sender, EventArgs e)
@@ -452,9 +423,72 @@ namespace vremRyad
             clearChartAndTable();
         }
 
+        private void fillAnalysisResults()
+        {
+            DataTable dataTable = (DataTable)dataGridViewTimeSeries.DataSource;
+
+            foreach (string headerName in tableHeadersAnalyze.Values)
+            {
+                if (!dataTable.Columns.Contains(headerName)) 
+                {
+                    dataTable.Columns.Add(new DataColumn(headerName));
+                }
+            }
+
+            for (int i = 0; i < dataTable.Rows.Count - 1; i++)
+            {
+                dataTable.Rows[i + 1][tableHeadersAnalyze["AbsoluteIncrease"]] = $"{this.timeSeries.AbsoluteIncrease[i][0]}\t{this.timeSeries.AbsoluteIncrease[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["ChainGrowthRate"]] = $"{this.timeSeries.ChainGrowthRate[i][0]}\t{this.timeSeries.ChainGrowthRate[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["BaseGrowthRate"]] = $"{this.timeSeries.BaseGrowthRate[i][0]}\t {this.timeSeries.BaseGrowthRate[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["IncreaseRate"]] = $"{this.timeSeries.IncreaseRate[i][0]}\t {this.timeSeries.IncreaseRate[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["AbsoluteIncreaseValueOnePercent"]] = this.timeSeries.AbsoluteIncreaseValueOnePercent[i];
+
+                if (i < dataTable.Rows.Count - 2)
+                {
+                    dataTable.Rows[i + 2][tableHeadersAnalyze["RelativeAcceleration"]] = this.timeSeries.RelativeAcceleration[i];
+                    dataTable.Rows[i + 2][tableHeadersAnalyze["LeadRatio"]] = this.timeSeries.LeadRatio[i];
+                }
+            }
+
+            Console.WriteLine("Средний уровень ряда: " + this.timeSeries.AverageRowLevel);
+            Console.WriteLine("Средний абсолютный прирост: " + this.timeSeries.AverageAbsoluteIncrease);
+            Console.WriteLine("Средний темп роста, %: " + this.timeSeries.AverageAverageChainGrowthRatePercent);
+        }
+
         private void buttonAnalyzeAndForecast_Click(object sender, EventArgs e)
         {
-            analyzeTimeSeries();
+            try
+            {
+                this.timeSeries.analyzeAndForecast();
+                this.fillAnalysisResults();
+                
+            }
+            catch
+            {
+                throw new Exception("Ошибка анализа");
+            }
+        }
+
+        private void dataGridViewTimeSeries_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            e.Paint(e.CellBounds,
+                DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
+
+            if (e.Value != null)
+
+            {
+
+                e.Graphics.DrawString(e.Value.ToString(),
+
+                    e.CellStyle.Font,
+
+                    new System.Drawing.SolidBrush(e.CellStyle.ForeColor),
+
+                    e.CellBounds.X, e.CellBounds.Y);
+
+            }
+
+            e.Handled = true;
         }
     }
 }
