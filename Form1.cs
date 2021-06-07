@@ -624,5 +624,21 @@ namespace vremRyad
                 this.timeSeries.ForecastCount = numberValues.number;
             }
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Данная программа используется для анализа и прогнозирования временных рядов.\n" +
+                "Для прогнозирования используются следующие методы:\n" +
+                "• По среднему коэффициенту роста\n" +
+                "• На основе метода скользящей средней\n" +
+                "• На основе средних показателей динамики\n\n" +
+                "Программу разработали студенты 3 курса Института Цифровых Систем:\n" +
+                "• Бабеев Роман\n" +
+                "• Буцких Илья\n" +
+                "• Грюк Влада\n" +
+                "• Шахов Степан\n\n" +
+                "Контакты для обратной связи: takistepan@gmail.com\n\n", "О программе", 
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
