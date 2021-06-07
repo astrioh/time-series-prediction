@@ -28,11 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataGridViewTimeSeries = new System.Windows.Forms.DataGridView();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.AverageChainGrowthRatePercent = new System.Windows.Forms.Label();
+            this.AverageAbsoluteIncreaseLabel = new System.Windows.Forms.Label();
+            this.AverageRowLevelLabel = new System.Windows.Forms.Label();
             this.buttonAnalyzeAndForecast = new System.Windows.Forms.Button();
             this.chartTimeSeries = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -50,6 +56,8 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.графикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.исходныеДанныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.прогнозированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graphTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.curvedLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.straightLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,14 +65,14 @@
             this.columnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.radarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forecastingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.forecastingMethodsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NumberOfPredictedValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.таблицаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
@@ -73,7 +81,12 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTimeSeries)).BeginInit();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartTimeSeries)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -82,13 +95,12 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.dataGridViewTimeSeries);
-            this.splitContainer1.Panel1.Controls.Add(this.buttonAnalyzeAndForecast);
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
@@ -98,6 +110,29 @@
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 1;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(2);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.dataGridViewTimeSeries);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.BackColor = System.Drawing.Color.White;
+            this.splitContainer2.Panel2.Controls.Add(this.panel1);
+            this.splitContainer2.Panel2.Controls.Add(this.buttonAnalyzeAndForecast);
+            this.splitContainer2.Panel2MinSize = 125;
+            this.splitContainer2.Size = new System.Drawing.Size(399, 560);
+            this.splitContainer2.SplitterDistance = 429;
+            this.splitContainer2.SplitterWidth = 3;
+            this.splitContainer2.TabIndex = 0;
+            // 
             // dataGridViewTimeSeries
             // 
             this.dataGridViewTimeSeries.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
@@ -105,43 +140,96 @@
             this.dataGridViewTimeSeries.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTimeSeries.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTimeSeries.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewTimeSeries.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataGridViewTimeSeries.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridViewTimeSeries.MultiSelect = false;
             this.dataGridViewTimeSeries.Name = "dataGridViewTimeSeries";
             this.dataGridViewTimeSeries.ReadOnly = true;
             this.dataGridViewTimeSeries.RowHeadersVisible = false;
             this.dataGridViewTimeSeries.RowHeadersWidth = 51;
             this.dataGridViewTimeSeries.RowTemplate.Height = 24;
-            this.dataGridViewTimeSeries.Size = new System.Drawing.Size(399, 528);
-            this.dataGridViewTimeSeries.TabIndex = 2;
+            this.dataGridViewTimeSeries.Size = new System.Drawing.Size(399, 429);
+            this.dataGridViewTimeSeries.TabIndex = 4;
             this.dataGridViewTimeSeries.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridViewTimeSeries_CellPainting);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.AverageChainGrowthRatePercent);
+            this.panel1.Controls.Add(this.AverageAbsoluteIncreaseLabel);
+            this.panel1.Controls.Add(this.AverageRowLevelLabel);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.MinimumSize = new System.Drawing.Size(399, 92);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(399, 96);
+            this.panel1.TabIndex = 5;
+            // 
+            // AverageChainGrowthRatePercent
+            // 
+            this.AverageChainGrowthRatePercent.AutoSize = true;
+            this.AverageChainGrowthRatePercent.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AverageChainGrowthRatePercent.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AverageChainGrowthRatePercent.Location = new System.Drawing.Point(0, 58);
+            this.AverageChainGrowthRatePercent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AverageChainGrowthRatePercent.Name = "AverageChainGrowthRatePercent";
+            this.AverageChainGrowthRatePercent.Padding = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.AverageChainGrowthRatePercent.Size = new System.Drawing.Size(10, 24);
+            this.AverageChainGrowthRatePercent.TabIndex = 10;
+            // 
+            // AverageAbsoluteIncreaseLabel
+            // 
+            this.AverageAbsoluteIncreaseLabel.AutoSize = true;
+            this.AverageAbsoluteIncreaseLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AverageAbsoluteIncreaseLabel.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AverageAbsoluteIncreaseLabel.Location = new System.Drawing.Point(0, 34);
+            this.AverageAbsoluteIncreaseLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AverageAbsoluteIncreaseLabel.Name = "AverageAbsoluteIncreaseLabel";
+            this.AverageAbsoluteIncreaseLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.AverageAbsoluteIncreaseLabel.Size = new System.Drawing.Size(10, 24);
+            this.AverageAbsoluteIncreaseLabel.TabIndex = 9;
+            // 
+            // AverageRowLevelLabel
+            // 
+            this.AverageRowLevelLabel.AutoSize = true;
+            this.AverageRowLevelLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AverageRowLevelLabel.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AverageRowLevelLabel.Location = new System.Drawing.Point(0, 0);
+            this.AverageRowLevelLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AverageRowLevelLabel.Name = "AverageRowLevelLabel";
+            this.AverageRowLevelLabel.Padding = new System.Windows.Forms.Padding(10, 10, 0, 5);
+            this.AverageRowLevelLabel.Size = new System.Drawing.Size(10, 34);
+            this.AverageRowLevelLabel.TabIndex = 8;
             // 
             // buttonAnalyzeAndForecast
             // 
             this.buttonAnalyzeAndForecast.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonAnalyzeAndForecast.Enabled = false;
             this.buttonAnalyzeAndForecast.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonAnalyzeAndForecast.Location = new System.Drawing.Point(0, 528);
-            this.buttonAnalyzeAndForecast.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAnalyzeAndForecast.Location = new System.Drawing.Point(0, 96);
+            this.buttonAnalyzeAndForecast.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAnalyzeAndForecast.Name = "buttonAnalyzeAndForecast";
             this.buttonAnalyzeAndForecast.Size = new System.Drawing.Size(399, 32);
-            this.buttonAnalyzeAndForecast.TabIndex = 1;
+            this.buttonAnalyzeAndForecast.TabIndex = 4;
             this.buttonAnalyzeAndForecast.Text = "Проанализировать и спрогнозировать";
             this.buttonAnalyzeAndForecast.UseVisualStyleBackColor = true;
             this.buttonAnalyzeAndForecast.Click += new System.EventHandler(this.buttonAnalyzeAndForecast_Click);
             // 
             // chartTimeSeries
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chartTimeSeries.ChartAreas.Add(chartArea5);
+            chartArea1.Name = "ChartArea1";
+            this.chartTimeSeries.ChartAreas.Add(chartArea1);
             this.chartTimeSeries.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartTimeSeries.Location = new System.Drawing.Point(0, 0);
-            this.chartTimeSeries.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chartTimeSeries.Margin = new System.Windows.Forms.Padding(2);
             this.chartTimeSeries.Name = "chartTimeSeries";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series5.Color = System.Drawing.Color.Red;
-            series5.Name = "Series1";
-            this.chartTimeSeries.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Color = System.Drawing.Color.Red;
+            series1.Name = "Series1";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Name = "Series2";
+            this.chartTimeSeries.Series.Add(series1);
+            this.chartTimeSeries.Series.Add(series2);
             this.chartTimeSeries.Size = new System.Drawing.Size(611, 560);
             this.chartTimeSeries.TabIndex = 11;
             this.chartTimeSeries.Text = "chart1";
@@ -268,10 +356,26 @@
             // 
             // colorToolStripMenuItem
             // 
+            this.colorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.исходныеДанныеToolStripMenuItem,
+            this.прогнозированиеToolStripMenuItem});
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
             this.colorToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.colorToolStripMenuItem.Text = "&Цвет";
-            this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
+            // 
+            // исходныеДанныеToolStripMenuItem
+            // 
+            this.исходныеДанныеToolStripMenuItem.Name = "исходныеДанныеToolStripMenuItem";
+            this.исходныеДанныеToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.исходныеДанныеToolStripMenuItem.Text = "&Исходные данные";
+            this.исходныеДанныеToolStripMenuItem.Click += new System.EventHandler(this.initialColorToolStripMenuItem_Click);
+            // 
+            // прогнозированиеToolStripMenuItem
+            // 
+            this.прогнозированиеToolStripMenuItem.Name = "прогнозированиеToolStripMenuItem";
+            this.прогнозированиеToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.прогнозированиеToolStripMenuItem.Text = "&Прогнозирование";
+            this.прогнозированиеToolStripMenuItem.Click += new System.EventHandler(this.forecastColorToolStripMenuItem_Click);
             // 
             // graphTypeToolStripMenuItem
             // 
@@ -330,74 +434,77 @@
             // forecastingToolStripMenuItem
             // 
             this.forecastingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3});
+            this.forecastingMethodsToolStripMenuItem,
+            this.NumberOfPredictedValuesToolStripMenuItem});
             this.forecastingToolStripMenuItem.Name = "forecastingToolStripMenuItem";
             this.forecastingToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
             this.forecastingToolStripMenuItem.Text = "&Прогнозирование";
             // 
-            // toolStripMenuItem1
+            // forecastingMethodsToolStripMenuItem
             // 
-            this.toolStripMenuItem1.Checked = true;
-            this.toolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(316, 22);
-            this.toolStripMenuItem1.Tag = "0";
-            this.toolStripMenuItem1.Text = "По среднему коэффициенту роста";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.forecastingChanges);
+            this.forecastingMethodsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem,
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem,
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem});
+            this.forecastingMethodsToolStripMenuItem.Name = "forecastingMethodsToolStripMenuItem";
+            this.forecastingMethodsToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.forecastingMethodsToolStripMenuItem.Text = "&Метод прогнозирования";
             // 
-            // toolStripMenuItem2
+            // поСреднемуКоэффициентуРостаToolStripMenuItem
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(316, 22);
-            this.toolStripMenuItem2.Tag = "1";
-            this.toolStripMenuItem2.Text = "На основе стационарного временного ряда";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.forecastingChanges);
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.Checked = true;
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.Name = "поСреднемуКоэффициентуРостаToolStripMenuItem";
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.Tag = "0";
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.Text = "По среднему коэффициенту роста";
+            this.поСреднемуКоэффициентуРостаToolStripMenuItem.Click += new System.EventHandler(this.forecastingChanges);
             // 
-            // toolStripMenuItem3
+            // наОсновеМетодаСкользящейСреднейToolStripMenuItem
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(316, 22);
-            this.toolStripMenuItem3.Tag = "2";
-            this.toolStripMenuItem3.Text = "На основе средних показателей динамики";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.forecastingChanges);
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem.Name = "наОсновеМетодаСкользящейСреднейToolStripMenuItem";
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem.Tag = "1";
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem.Text = "На основе метода скользящей средней";
+            this.наОсновеМетодаСкользящейСреднейToolStripMenuItem.Click += new System.EventHandler(this.forecastingChanges);
+            // 
+            // наОсновеСреднихПоказателейДинамикиToolStripMenuItem
+            // 
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem.Name = "наОсновеСреднихПоказателейДинамикиToolStripMenuItem";
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem.Tag = "2";
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem.Text = "На основе средних показателей динамики";
+            this.наОсновеСреднихПоказателейДинамикиToolStripMenuItem.Click += new System.EventHandler(this.forecastingChanges);
+            // 
+            // NumberOfPredictedValuesToolStripMenuItem
+            // 
+            this.NumberOfPredictedValuesToolStripMenuItem.Name = "NumberOfPredictedValuesToolStripMenuItem";
+            this.NumberOfPredictedValuesToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.NumberOfPredictedValuesToolStripMenuItem.Text = "&Количество прогнозируемых значений";
+            this.NumberOfPredictedValuesToolStripMenuItem.Click += new System.EventHandler(this.NumberOfPredictedValuesToolStripMenuItem_Click);
             // 
             // таблицаToolStripMenuItem
             // 
             this.таблицаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.separatorToolStripMenuItem});
             this.таблицаToolStripMenuItem.Name = "таблицаToolStripMenuItem";
-            this.таблицаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
-            this.таблицаToolStripMenuItem.Text = "&Таблица";
+            this.таблицаToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.таблицаToolStripMenuItem.Text = "&Данные";
             // 
             // separatorToolStripMenuItem
             // 
             this.separatorToolStripMenuItem.Name = "separatorToolStripMenuItem";
-            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.separatorToolStripMenuItem.Text = "&Разделитель";
+            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.separatorToolStripMenuItem.Text = "&Разделитель CSV файла";
             this.separatorToolStripMenuItem.Click += new System.EventHandler(this.separatorToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentToolStripMenuItem,
-            this.toolStripSeparator5,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.helpToolStripMenuItem.Text = "Спра&вка";
-            // 
-            // contentToolStripMenuItem
-            // 
-            this.contentToolStripMenuItem.Name = "contentToolStripMenuItem";
-            this.contentToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.contentToolStripMenuItem.Text = "&Содержание";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(155, 6);
             // 
             // aboutToolStripMenuItem
             // 
@@ -421,7 +528,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Временные ряды";
@@ -429,7 +536,13 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTimeSeries)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartTimeSeries)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -450,12 +563,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem contentToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Button buttonAnalyzeAndForecast;
-        private System.Windows.Forms.DataGridView dataGridViewTimeSeries;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartTimeSeries;
         private System.Windows.Forms.ToolStripMenuItem графикToolStripMenuItem;
@@ -470,14 +579,25 @@
         private System.Windows.Forms.ToolStripMenuItem columnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem radarToolStripMenuItem;
         private System.Windows.Forms.ColorDialog colorDialog;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem sendToMailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem очиститьToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.DataGridView dataGridViewTimeSeries;
+        private System.Windows.Forms.Button buttonAnalyzeAndForecast;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label AverageChainGrowthRatePercent;
+        private System.Windows.Forms.Label AverageAbsoluteIncreaseLabel;
+        private System.Windows.Forms.Label AverageRowLevelLabel;
+        private System.Windows.Forms.ToolStripMenuItem NumberOfPredictedValuesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem forecastingMethodsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem поСреднемуКоэффициентуРостаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem наОсновеМетодаСкользящейСреднейToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem наОсновеСреднихПоказателейДинамикиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem исходныеДанныеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem прогнозированиеToolStripMenuItem;
     }
 }
 

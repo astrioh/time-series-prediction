@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace vremRyad
 {    
@@ -30,9 +26,8 @@ namespace vremRyad
         private double averageAverageChainGrowthRatePercent;
 
         private int forecastName;
-        private int forecastCount = 15;
         private double[][] forecastValues;
-
+        private int forecastCount = 15;
 
         public double[] TimeSeriesSet { get => timeSeriesSet; set => timeSeriesSet = value; }
         public Methods SelectedMethod { get => selectedMethod; set => selectedMethod = value; }
@@ -45,7 +40,7 @@ namespace vremRyad
         public double[] LeadRatio { get => leadRatio; set => leadRatio = value; }
         public double AverageRowLevel { get => averageRowLevel; set => averageRowLevel = value; }
         public double AverageAbsoluteIncrease { get => averageAbsoluteIncrease; set => averageAbsoluteIncrease = value; }
-        public double AverageAverageChainGrowthRatePercent { get => averageAverageChainGrowthRatePercent; set => averageAverageChainGrowthRatePercent = value; }
+        public double AverageChainGrowthRatePercent { get => averageAverageChainGrowthRatePercent; set => averageAverageChainGrowthRatePercent = value; }
         public double[][] ForecastValues { get => forecastValues; set => forecastValues = value; }
         public int ForecastCount { get => forecastCount; set => forecastCount = value; }
         public int ForecastName { get => forecastName; set => forecastName = value; }
@@ -89,7 +84,7 @@ namespace vremRyad
 
             this.AverageRowLevel = calculateAverageRowLevel();
             this.AverageAbsoluteIncrease = calculateAverageAbsoluteIncrease();
-            this.AverageAverageChainGrowthRatePercent = calculateAverageChainGrowthRatePercent();
+            this.AverageChainGrowthRatePercent = calculateAverageChainGrowthRatePercent();
         }
 
         public double[] calculateAbsoluteIncrease(double current, double previous, double first)
@@ -185,46 +180,42 @@ namespace vremRyad
 
         private void forecastAverageGrowthRate()
         {
-            Console.WriteLine("Средний коэф роста");
+            this.forecastValues = new double[this.forecastCount][];
+
             for (int i = 0; i < this.ForecastCount; i++)
             {
                 this.ForecastValues[i] = new double[2];
                 this.ForecastValues[i][0] = this.ForecastName + i + 1;
-                this.ForecastValues[i][1] = this.timeSeriesSet[this.TimeSeriesSet.Length - 1] * Math.Pow(this.AverageAverageChainGrowthRatePercent / 100, i + 1);
-                Console.WriteLine(this.ForecastValues[i][0] + " | " + this.ForecastValues[i][1]);
+                this.ForecastValues[i][1] = this.timeSeriesSet[this.TimeSeriesSet.Length - 1] * Math.Pow(this.AverageChainGrowthRatePercent / 100, i + 1);
             }
-            Console.WriteLine("________________");
         }
 
         private void forecastAveragePerfomanceIndicators()
         {
-            Console.WriteLine("Средние показатели динамики");
+            this.forecastValues = new double[this.forecastCount][];
+
             for (int i = 0; i < this.ForecastCount; i++)
             {
                 this.ForecastValues[i] = new double[2];
                 this.ForecastValues[i][0] = this.ForecastName + i + 1;
                 this.ForecastValues[i][1] = this.timeSeriesSet[this.TimeSeriesSet.Length - 1] + (this.AverageAbsoluteIncrease * (i + 1));
-                Console.WriteLine(this.ForecastValues[i][0] + " | " + this.ForecastValues[i][1]);
             }
-            Console.WriteLine("________________");
         }
 
         private void forecastMovingAverage()
         {
-            Console.WriteLine("Скользящая с 3 уровнями");
+            this.ForecastValues = new double[this.TimeSeriesSet.Length][];
+
             for (int i = 1; i < this.TimeSeriesSet.Length - 1; i++)
             {
                 this.ForecastValues[i] = new double[2];
+                this.ForecastValues[i][0] = this.ForecastName - this.TimeSeriesSet.Length + 1 + i;
                 this.ForecastValues[i][1] = (this.TimeSeriesSet[i - 1] + this.TimeSeriesSet[i] + this.TimeSeriesSet[i + 1]) / 3;
-                Console.WriteLine(this.ForecastValues[i][0] + " | " + this.ForecastValues[i][1]);
             }
-            Console.WriteLine("________________");
         }
 
         private void forecast(Methods method)
         {
-            this.forecastValues = new double[this.forecastCount][];
-
             switch (method)
             {
                 case Methods.AverageGrowthRate:

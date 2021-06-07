@@ -31,6 +31,7 @@ namespace vremRyad
         private string form1Name = "Временные ряды";
         private string pdfFileName = string.Empty;
         private DataTable dt;
+        private double[][] parsedData;
 
         public char Separator { get => separator; set => separator = value; }
 
@@ -55,7 +56,7 @@ namespace vremRyad
                 openFileName = openFileDialog.FileName;
                 try
                 {
-                    double[][] parsedData = this.parseTimeSeries(openFileName);
+                    this.parsedData = this.parseTimeSeries(openFileName);
 
                     double[] timeSeriesData = new double[parsedData.Length];
                     for (int i = 0; i < parsedData.Length; i++)
@@ -71,6 +72,13 @@ namespace vremRyad
                     buttonAnalyzeAndForecast.Enabled = true;
 
                     this.Text = form1Name + " (" + openFileName.Split('\\')[openFileName.Split('\\').Length - 1] + ")";
+
+                    foreach (DataGridViewColumn column in dataGridViewTimeSeries.Columns)
+                    {
+                        column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    buttonAnalyzeAndForecast.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -190,7 +198,7 @@ namespace vremRyad
 
         }
 
-        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void initialColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             colorDialog.Color = chartTimeSeries.Series[0].Color;
             if (colorDialog.ShowDialog() == DialogResult.OK)
@@ -198,25 +206,39 @@ namespace vremRyad
                 chartTimeSeries.Series[0].Color = colorDialog.Color;
             }
         }
-        
+
+        private void forecastColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorDialog.Color = chartTimeSeries.Series[1].Color;
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                chartTimeSeries.Series[1].Color = colorDialog.Color;
+            }
+        }
+
         private void chartTypeChanged(int tag)
         {
             switch (tag)
             {
                 case 0:
                     chartTimeSeries.Series[0].ChartType = SeriesChartType.Spline;
+                    chartTimeSeries.Series[1].ChartType = SeriesChartType.Spline;
                     break;
                 case 1:
                     chartTimeSeries.Series[0].ChartType = SeriesChartType.Line;
+                    chartTimeSeries.Series[1].ChartType = SeriesChartType.Line;
                     break;
                 case 2:
                     chartTimeSeries.Series[0].ChartType = SeriesChartType.Bar;
+                    chartTimeSeries.Series[1].ChartType = SeriesChartType.Bar;
                     break;
                 case 3:
                     chartTimeSeries.Series[0].ChartType = SeriesChartType.Column;
+                    chartTimeSeries.Series[1].ChartType = SeriesChartType.Column;
                     break;
                 case 4:
                     chartTimeSeries.Series[0].ChartType = SeriesChartType.Radar;
+                    chartTimeSeries.Series[1].ChartType = SeriesChartType.Radar;
                     break;
             }
         }
@@ -249,7 +271,7 @@ namespace vremRyad
 
         private void forecastingChanges(object sender, EventArgs e)
         {
-            foreach (ToolStripMenuItem item in forecastingToolStripMenuItem.DropDownItems)
+            foreach (ToolStripMenuItem item in forecastingMethodsToolStripMenuItem.DropDownItems)
             {
                 item.Checked = false;
             }
@@ -260,7 +282,7 @@ namespace vremRyad
         private string forecastingCheck()
         {
             string itemText = string.Empty;
-            foreach (ToolStripMenuItem item in forecastingToolStripMenuItem.DropDownItems)
+            foreach (ToolStripMenuItem item in forecastingMethodsToolStripMenuItem.DropDownItems)
             {
                 if (item.Checked)
                 {
@@ -277,12 +299,21 @@ namespace vremRyad
             PdfPTable table = new PdfPTable(dataGridViewTimeSeries.Columns.Count);
             string fontLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
             BaseFont baseFont = BaseFont.CreateFont(fontLocation, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            Font fontParagraph = new Font(baseFont, 14, iTextSharp.text.Font.NORMAL);
+            Font fontParagraphBlack = new Font(baseFont, 14, iTextSharp.text.Font.NORMAL);
+            Font fontParagraphBlue = new Font(baseFont, 14, iTextSharp.text.Font.NORMAL);
+            fontParagraphBlue.SetColor(0, 0, 255);
+            for (int i = 0; i < dataGridViewTimeSeries.Columns.Count; i++)
+            {
+                table.AddCell(new Phrase(dataGridViewTimeSeries.Columns[i].HeaderCell.Value.ToString(), fontParagraphBlack));
+            }
             for (int i = 0; i < dataGridViewTimeSeries.Rows.Count - 1; i++)
             {
                 for (int j = 0; j < dataGridViewTimeSeries.Columns.Count; j++)
                 {
-                    table.AddCell(new Phrase(dataGridViewTimeSeries.Rows[i].Cells[j].Value.ToString(), fontParagraph));
+                    bool isForecastCell = dataGridViewTimeSeries.Rows[i].Cells[j].Style.ForeColor == System.Drawing.Color.Blue ||
+                        dataGridViewTimeSeries.Rows[i].DefaultCellStyle.ForeColor == System.Drawing.Color.Blue;
+                    table.AddCell(new Phrase(dataGridViewTimeSeries.Rows[i].Cells[j].Value.ToString(), isForecastCell ? fontParagraphBlue : fontParagraphBlack));
+
                 }
             }
 
@@ -303,11 +334,18 @@ namespace vremRyad
             pdfImage.Alignment = Element.ALIGN_CENTER;
 
             // Создание параграфов
-            Paragraph openCsvFile = new Paragraph($"Файл: {openFileName.Split('\\')[openFileName.Split('\\').Length - 1]}", fontParagraph);
-            Paragraph dateTime = new Paragraph($"{DateTime.Now}", fontParagraph);
+            Paragraph openCsvFile = new Paragraph($"Файл: {openFileName.Split('\\')[openFileName.Split('\\').Length - 1]}", fontParagraphBlack);
+            Paragraph dateTime = new Paragraph($"{DateTime.Now}", fontParagraphBlack);
             dateTime.Alignment = Element.ALIGN_RIGHT;
-            Paragraph forecasting = new Paragraph($"Прогнозирование: {forecastingCheck()}", fontParagraph);
-            Paragraph analysis = new Paragraph($"Анализ: ", fontParagraph);
+            Paragraph forecasting = new Paragraph($"Прогнозирование: {forecastingCheck()}", fontParagraphBlack);
+
+
+            //AverageRowLevelLabel
+            Paragraph AvRowLevLabInf = new Paragraph(AverageRowLevelLabel.Text, fontParagraphBlack);
+            //AverageAbsoluteIncreaseLabel
+            Paragraph AvAbIncLabInf = new Paragraph(AverageAbsoluteIncreaseLabel.Text, fontParagraphBlack);
+            //AverageChainGrowthRatePercent
+            Paragraph AvChGrRaPerLabInf = new Paragraph(AverageChainGrowthRatePercent.Text, fontParagraphBlack);
 
             // Создание документа
             Document pdfDoc;
@@ -320,7 +358,9 @@ namespace vremRyad
                 pdfDoc.Add(dateTime);
                 pdfDoc.Add(openCsvFile);
                 pdfDoc.Add(forecasting);
-                pdfDoc.Add(analysis);
+                pdfDoc.Add(AvRowLevLabInf);
+                pdfDoc.Add(AvAbIncLabInf);
+                pdfDoc.Add(AvChGrRaPerLabInf);
                 pdfDoc.Add(pdfImage);
                 pdfDoc.Add(table);
                 pdfDoc.Close();
@@ -336,6 +376,7 @@ namespace vremRyad
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            saveFileDialog.FileName = String.Empty;
             if (dataGridViewTimeSeries.Rows.Count < 1 || openFileName == string.Empty)
             {
                 MessageBox.Show($"Файл не открыт!\nОткройте файл и повторите попытку!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -399,7 +440,7 @@ namespace vremRyad
 
             string pathPDFFile = System.Reflection.Assembly.GetExecutingAssembly().Location.
                 Substring(0, System.Reflection.Assembly.GetExecutingAssembly().Location.LastIndexOf('\\')) +
-                $@"\pdfFiles\Отчёт по файлу ({openFileName.Split('\\')[openFileName.Split('\\').Length - 1]} "+
+                $@"\pdfFiles\Отчёт по файлу ({openFileName.Split('\\')[openFileName.Split('\\').Length - 1]} " +
                 $@"{DateTime.Now.ToString("dd.MM.yyyy HH.mm.ss")}).pdf";
 
             saveAsPdf(pathPDFFile);
@@ -413,8 +454,12 @@ namespace vremRyad
         private void clearChartAndTable()
         {
             chartTimeSeries.Series[0].Points.Clear();
+            chartTimeSeries.Series[1].Points.Clear();
             dt = new DataTable();
             dataGridViewTimeSeries.DataSource = dt;
+            AverageRowLevelLabel.Text = string.Empty;
+            AverageAbsoluteIncreaseLabel.Text = string.Empty;
+            AverageChainGrowthRatePercent.Text = string.Empty;
         }
 
 
@@ -429,43 +474,120 @@ namespace vremRyad
 
             foreach (string headerName in tableHeadersAnalyze.Values)
             {
-                if (!dataTable.Columns.Contains(headerName)) 
+                if (!dataTable.Columns.Contains(headerName))
                 {
                     dataTable.Columns.Add(new DataColumn(headerName));
                 }
             }
 
-            for (int i = 0; i < dataTable.Rows.Count - 1; i++)
+            for (int i = 0; i < this.timeSeries.TimeSeriesSet.Length - 1; i++)
             {
-                dataTable.Rows[i + 1][tableHeadersAnalyze["AbsoluteIncrease"]] = $"{this.timeSeries.AbsoluteIncrease[i][0]}\t{this.timeSeries.AbsoluteIncrease[i][1]}";
-                dataTable.Rows[i + 1][tableHeadersAnalyze["ChainGrowthRate"]] = $"{this.timeSeries.ChainGrowthRate[i][0]}\t{this.timeSeries.ChainGrowthRate[i][1]}";
-                dataTable.Rows[i + 1][tableHeadersAnalyze["BaseGrowthRate"]] = $"{this.timeSeries.BaseGrowthRate[i][0]}\t {this.timeSeries.BaseGrowthRate[i][1]}";
-                dataTable.Rows[i + 1][tableHeadersAnalyze["IncreaseRate"]] = $"{this.timeSeries.IncreaseRate[i][0]}\t {this.timeSeries.IncreaseRate[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["AbsoluteIncrease"]] = $"{this.timeSeries.AbsoluteIncrease[i][0]}\t  {this.timeSeries.AbsoluteIncrease[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["ChainGrowthRate"]] = $"{this.timeSeries.ChainGrowthRate[i][0]}\t  {this.timeSeries.ChainGrowthRate[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["BaseGrowthRate"]] = $"{this.timeSeries.BaseGrowthRate[i][0]}\t  {this.timeSeries.BaseGrowthRate[i][1]}";
+                dataTable.Rows[i + 1][tableHeadersAnalyze["IncreaseRate"]] = $"{this.timeSeries.IncreaseRate[i][0]}\t  {this.timeSeries.IncreaseRate[i][1]}";
                 dataTable.Rows[i + 1][tableHeadersAnalyze["AbsoluteIncreaseValueOnePercent"]] = this.timeSeries.AbsoluteIncreaseValueOnePercent[i];
 
-                if (i < dataTable.Rows.Count - 2)
+                if (i < this.timeSeries.TimeSeriesSet.Length - 2)
                 {
                     dataTable.Rows[i + 2][tableHeadersAnalyze["RelativeAcceleration"]] = this.timeSeries.RelativeAcceleration[i];
                     dataTable.Rows[i + 2][tableHeadersAnalyze["LeadRatio"]] = this.timeSeries.LeadRatio[i];
                 }
             }
 
-            Console.WriteLine("Средний уровень ряда: " + this.timeSeries.AverageRowLevel);
-            Console.WriteLine("Средний абсолютный прирост: " + this.timeSeries.AverageAbsoluteIncrease);
-            Console.WriteLine("Средний темп роста, %: " + this.timeSeries.AverageAverageChainGrowthRatePercent);
+            AverageRowLevelLabel.Text = "Средний уровень ряда: " + Math.Round(this.timeSeries.AverageRowLevel, 2);
+            AverageAbsoluteIncreaseLabel.Text = "Средний абсолютный прирост: " + Math.Round(this.timeSeries.AverageAbsoluteIncrease, 2);
+            AverageChainGrowthRatePercent.Text = "Средний темп роста, %: " + Math.Round(this.timeSeries.AverageChainGrowthRatePercent, 2);
+        }
+
+        private void clearForecastResults()
+        {
+            DataTable dataTable = (DataTable)dataGridViewTimeSeries.DataSource;
+
+            if (dataGridViewTimeSeries.Columns.Contains("Скользящая средняя из 3-х уровней"))
+            {
+                dataTable.Columns.Remove("Скользящая средняя из 3-х уровней");
+            }
+
+            if (dataTable.Rows.Count > this.timeSeries.TimeSeriesSet.Length)
+            {
+                for (int i = this.timeSeries.TimeSeriesSet.Length; i < dataTable.Rows.Count; i++)
+                {
+                    this.fillDataTable(this.parsedData);
+                }
+            }
+        }
+
+        private void fillForecastResultsIntoTable()
+        {
+            DataTable dataTable = (DataTable)dataGridViewTimeSeries.DataSource;
+
+            if (this.timeSeries.SelectedMethod == TimeSeries.Methods.MovingAverage)
+            {
+                dataTable.Columns.Add(new DataColumn("Скользящая средняя из 3-х уровней"));
+
+                for (int i = 1; i < this.timeSeries.TimeSeriesSet.Length - 1; i++)
+                {
+                    dataTable.Rows[i]["Скользящая средняя из 3-х уровней"] = Math.Round(this.timeSeries.ForecastValues[i][1], 2);
+                    dataGridViewTimeSeries.Rows[i].Cells[dataTable.Columns.IndexOf("Скользящая средняя из 3-х уровней")].Style.ForeColor = System.Drawing.Color.Blue;
+                }
+            }
+            else
+            {
+                foreach (double[] forecastPair in this.timeSeries.ForecastValues)
+                {
+                    DataRow forecastRow = dataTable.NewRow();
+                    forecastRow[0] = forecastPair[0];
+                    forecastRow[1] = Math.Round(forecastPair[1], 2);
+
+                    dataTable.Rows.Add(forecastRow);
+                }
+
+                for (int i = this.timeSeries.TimeSeriesSet.Length; i < dataGridViewTimeSeries.Rows.Count; i++)
+                {
+                    dataGridViewTimeSeries.Rows[i].DefaultCellStyle.ForeColor = System.Drawing.Color.Blue;
+                }
+            }
+        }
+
+        private void plotForecastChart()
+        {
+            bool isMovingAverage = this.timeSeries.SelectedMethod == TimeSeries.Methods.MovingAverage;
+            chartTimeSeries.Series[1].Points.Clear();
+
+            if (!isMovingAverage)
+            {
+                chartTimeSeries.Series[1].Points.AddXY(
+                    processValueForChart(dataGridViewTimeSeries[0, this.timeSeries.TimeSeriesSet.Length - 1].Value), 
+                    processValueForChart(dataGridViewTimeSeries[1, this.timeSeries.TimeSeriesSet.Length - 1].Value)
+                );
+            }
+
+            int startingIndex = isMovingAverage ? 1 : 0;
+
+            for (int i = startingIndex; i < this.timeSeries.ForecastValues.Length - 1; i++)
+            {
+                chartTimeSeries.Series[1].Points.AddXY(processValueForChart(this.timeSeries.ForecastValues[i][0]), processValueForChart(this.timeSeries.ForecastValues[i][1]));
+            }
         }
 
         private void buttonAnalyzeAndForecast_Click(object sender, EventArgs e)
         {
             try
             {
+                this.clearForecastResults();
                 this.timeSeries.analyzeAndForecast();
                 this.fillAnalysisResults();
-                
+                this.fillForecastResultsIntoTable();
+                this.plotForecastChart();
+                foreach (DataGridViewColumn column in dataGridViewTimeSeries.Columns)
+                {
+                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Ошибка анализа");
+                MessageBox.Show($"Ошибка: {ex.Message}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -489,6 +611,18 @@ namespace vremRyad
             }
 
             e.Handled = true;
+        }
+
+        private void NumberOfPredictedValuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NumberOfPredictedValues numberValues = new NumberOfPredictedValues();
+            numberValues.number = this.timeSeries.ForecastCount;
+
+            DialogResult result = numberValues.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                this.timeSeries.ForecastCount = numberValues.number;
+            }
         }
     }
 }
